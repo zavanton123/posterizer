@@ -1,19 +1,44 @@
 version: '3'
 services:
+  database:
+    image: mongo
+    container_name: posterizer-database
+    env_file:
+      - ./api/.env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME="zavanton"
+      - MONGO_INITDB_ROOT_PASSWORD="21665mylife"
+    volumes:
+      - dbdata:/data/db
+    networks:
+      - app-network
   api:
     build:
       context: ./api
       dockerfile: Dockerfile
     image: posterizer-api
     container_name: posterizer-api
+    env_file:
+      - ./api/.env
+    environment:
+      - DBHOST=database
+      - DBPORT="27017"
+      - DBNAME="posterizer"
+      - DBUSER="zavanton"
+      - DBPASSWORD="21665mylife"
     ports:
       - "3000:3000"
     volumes:
       - ./api:/usr/src/app
       - node_modules:/usr/src/app/node_modules
+    networks:
+      - app-network
+    depends_on:
+      - database
+    command: ./wait-for.sh database:27017 -- /usr/src/app/node_modules/.bin/nodemon app.js
 volumes:
   node_modules:
+  dbdata:
 networks:
-  default:
-    external:
-      name: localdev
+  app-network:
+    driver: bridge

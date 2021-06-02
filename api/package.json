@@ -2,7 +2,7 @@
   "name": "api",
   "version": "1.0.0",
   "description": "Api for the Posterizer project",
-  "main": "index.js",
+  "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
     "nodemon": "nodemon src/app.js"
