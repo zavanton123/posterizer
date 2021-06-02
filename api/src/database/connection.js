@@ -3,10 +3,12 @@ const {
   DBHOST, DBPORT, DBNAME, DBUSER, DBPASSWORD
 } = process.env;
 
-const url = `mongodb://${DBUSER}:${DBPASSWORD}@${DBHOST}:${DBPORT}/${DBNAME}?authSource=admin`;
+const url = `mongodb://database:27017/posterizer`;
 const options = {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 500,
+  connectTimeoutMS: 10000,
 };
 
 mongoose.connect(url, options);

@@ -3,11 +3,6 @@ services:
   database:
     image: mongo
     container_name: posterizer-database
-    env_file:
-      - ./api/.env
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME="zavanton"
-      - MONGO_INITDB_ROOT_PASSWORD="21665mylife"
     volumes:
       - dbdata:/data/db
     networks:
@@ -18,14 +13,6 @@ services:
       dockerfile: Dockerfile
     image: posterizer-api
     container_name: posterizer-api
-    env_file:
-      - ./api/.env
-    environment:
-      - DBHOST=database
-      - DBPORT="27017"
-      - DBNAME="posterizer"
-      - DBUSER="zavanton"
-      - DBPASSWORD="21665mylife"
     ports:
       - "3000:3000"
     volumes:
