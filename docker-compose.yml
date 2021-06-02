@@ -2,11 +2,8 @@ version: '3'
 services:
   database:
     image: mongo
-    container_name: posterizer-database
     volumes:
       - dbdata:/data/db
-    networks:
-      - app-network
   api:
     build:
       context: ./api
@@ -18,14 +15,9 @@ services:
     volumes:
       - ./api:/usr/src/app
       - node_modules:/usr/src/app/node_modules
-    networks:
-      - app-network
     depends_on:
       - database
     command: ./wait-for.sh database:27017 -- /usr/src/app/node_modules/.bin/nodemon app.js
 volumes:
   node_modules:
   dbdata:
-networks:
-  app-network:
-    driver: bridge
