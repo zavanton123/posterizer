@@ -42,8 +42,22 @@ exports.fetchPostById = async (req, res, next) => {
 }
 
 exports.createPost = async (req, res, next) => {
+  console.log(`zavanton - create post`);
   try {
-    const post = await Post.create({title: req.body.title});
+    const title = req.body.title;
+    const content = req.body.content;
+    const category = req.body.category;
+    console.log(`zavanton - category: ${category}`);
+    const tags = req.body.tags;
+    console.log(`zavanton - tags: ${tags}`);
+
+    const post = await Post.create({
+      title: title,
+      content: content,
+      category: category,
+      tags: tags
+    });
+    
     return res.status(201).json({
       message: 'Post created',
       post: {
