@@ -10,13 +10,16 @@ services:
       dockerfile: Dockerfile
     image: posterizer-api
     container_name: posterizer-api
+    env_file:
+      - .env
+    environment:
+      - DBPORT=$DBPORT
+      - DBNAME=$DBNAME
     ports:
       - "3000:3000"
     volumes:
       - ./api:/usr/src/app
-      - node_modules:/usr/src/app/node_modules
-    depends_on:
-      - database
+      - ./api/node_modules:/usr/src/app/node_modules
     command: ./wait-for.sh database:27017 -- /usr/src/app/node_modules/.bin/nodemon app.js
 volumes:
   node_modules:
