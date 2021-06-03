@@ -19,6 +19,28 @@ exports.fetchPosts = async (req, res, next) => {
   }
 };
 
+exports.fetchPostById = async (req, res, next) => {
+  try {
+    const postId = req.params.postId;
+    const post = await Post.findById(postId);
+    if (post) {
+      return res.status(200).json({
+        message: "Post is found",
+        post: {
+          _id: post._id,
+          title: post.title
+        }
+      });
+    } else {
+      return res.json({
+        message: `No post with id ${postId} is found.`
+      });
+    }
+  } catch (err) {
+    processError(err, next);
+  }
+}
+
 exports.createPost = async (req, res, next) => {
   try {
     const post = await Post.create({title: req.body.title});
