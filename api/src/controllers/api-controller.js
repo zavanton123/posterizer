@@ -4,9 +4,8 @@ const {processError} = require("../utils/errors");
 const {
   Post,
   User,
-  Comment,
-  // Category,
-  Tag
+  Tag,
+  Category,
 } = models;
 
 exports.fetchPosts = async (req, res, next) => {
@@ -34,26 +33,24 @@ exports.fetchPosts = async (req, res, next) => {
 };
 
 exports.fetchPostById = async (req, res, next) => {
-  return next();
-  // try {
-  //   const postId = req.params.postId;
-  //   const post = await Post.findById(postId);
-  //   if (post) {
-  //     return res.status(200).json({
-  //       message: "Post is found",
-  //       post: {
-  //         _id: post._id,
-  //         title: post.title
-  //       }
-  //     });
-  //   } else {
-  //     return res.json({
-  //       message: `No post with id ${postId} is found.`
-  //     });
-  //   }
-  // } catch (err) {
-  //   processError(err, next);
-  // }
+  try {
+    const postId = req.params.postId;
+    const post = await Post.findById(postId);
+    if (post) {
+      return res.status(200).json({
+        message: "Post is found",
+        post: {
+          post: post
+        }
+      });
+    } else {
+      return res.json({
+        message: `No post with id ${postId} is found.`
+      });
+    }
+  } catch (err) {
+    processError(err, next);
+  }
 }
 
 exports.createPost = async (req, res, next) => {
@@ -66,20 +63,33 @@ exports.createPost = async (req, res, next) => {
     });
     const title = req.body.title;
     const content = req.body.content;
-    const tags = req.body.tags;
-    console.log(`zavanton - tags: ${tags}`);
+    const categoryName = req.body.category;
+    console.log(`zavanton - category: ${categoryName}`);
+
+    let targetCategory;
+    targetCategory = await Category.findOne({name: categoryName});
+    if (!targetCategory) {
+      targetCategory = await Category.create({name: categoryName});
+    }
+
+    // const tags = req.body.tags;
+    // console.log(`zavanton - tags: ${tags}`);
 
     const post = await Post.create({
       title: title,
       content: content,
       author: user,
+      category: targetCategory._id,
     });
 
     return res.status(201).json({
       message: 'Post created',
       post: {
-        _id: post._id,
-        title: post.title
+        id: post._id,
+        title: post.title,
+        content: post.content,
+        author: user._id,
+        category: post.category._id
       }
     });
   } catch (error) {

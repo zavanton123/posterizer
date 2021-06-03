@@ -14,36 +14,18 @@ const PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User'
   },
-  // category: {
-  //   type: Schema.Types.ObjecId,
-  //   ref: 'Category'
-  // },
-  // tags: [
-  //   {
-  //     type: Schema.Types.ObjectId,
-  //     ref: 'Tag'
-  //   }
-  // ]
-});
-
-
-// const CategorySchema = new Schema({
-//   name: String
-// });
-
-
-const TagSchema = new Schema({
-  name: {
-    type: String,
-    required: true
+  category: {
+    type: Schema.Types.ObjectId,
+    ref: 'Category'
   },
-  posts: [
+  tags: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Post'
+      ref: 'Tag'
     }
   ]
 });
+
 
 const UserSchema = new Schema({
   username: {
@@ -59,6 +41,30 @@ const UserSchema = new Schema({
     required: true
   }
 });
+
+
+const CategorySchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  }
+});
+
+
+const TagSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  posts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Post'
+    }
+  ]
+});
+
+
 
 const CommentSchema = new Schema({
   name: {
@@ -76,7 +82,7 @@ const CommentSchema = new Schema({
 });
 
 exports.Post = mongoose.model('Post', PostSchema);
-// exports.Category = mongoose.model('Category', CategorySchema);
 exports.Tag = mongoose.model('Tag', TagSchema);
 exports.Comment = mongoose.model('Comment', CommentSchema);
 exports.User = mongoose.model('User', UserSchema);
+exports.Category = mongoose.model('Category', CategorySchema);
