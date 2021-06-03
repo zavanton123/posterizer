@@ -55,3 +55,22 @@ exports.createPost = async (req, res, next) => {
     processError(error, next);
   }
 };
+
+exports.deletePostById = async (req, res, next) => {
+  try {
+    const postId = req.params.postId;
+    const result = await Post.findByIdAndRemove(postId);
+    if (result) {
+      return res.status(200).json({
+        message: 'Removed post',
+        post: result
+      });
+    } else {
+      return res.status(200).json({
+        message: `No post with id ${postId} is found.`
+      });
+    }
+  } catch (err) {
+    processError(err, next);
+  }
+}
