@@ -59,14 +59,36 @@ exports.createPost = async (req, res, next) => {
 exports.deletePostById = async (req, res, next) => {
   try {
     const postId = req.params.postId;
-    const result = await Post.findByIdAndRemove(postId);
-    if (result) {
+    const deletedPost = await Post.findByIdAndRemove(postId);
+    if (deletedPost) {
       return res.status(200).json({
         message: 'Removed post',
-        post: result
+        post: deletedPost
       });
     } else {
       return res.status(200).json({
+        message: `No post with id ${postId} is found.`
+      });
+    }
+  } catch (err) {
+    processError(err, next);
+  }
+}
+
+exports.updatePostById = async (req, res, next) => {
+  try {
+    const postId = req.params.postId;
+    const post = await Post.findByIdAndUpdate(postId, {title: req.body.title});
+    if (post) {
+      return res.status(200).json({
+        message: "Post is updated",
+        post: {
+          _id: post._id,
+          title: post.title
+        }
+      });
+    } else {
+      return res.json({
         message: `No post with id ${postId} is found.`
       });
     }
