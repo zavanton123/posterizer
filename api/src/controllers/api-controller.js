@@ -1,4 +1,4 @@
-const Post = require('../models/posts');
+const Post = require('../models/post');
 const {processError} = require("../utils/errors");
 
 exports.fetchPosts = async (req, res, next) => {
