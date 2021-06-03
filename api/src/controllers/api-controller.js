@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const models = require('../models/models');
 const {processError} = require("../utils/errors");
 
@@ -56,30 +57,43 @@ exports.fetchPostById = async (req, res, next) => {
 exports.createPost = async (req, res, next) => {
   console.log(`zavanton - create post`);
   try {
+    // TODO - zavanton get from authorization header
     const user = await User.create({
       username: 'zavanton',
       email: 'zavanton@yandex.ru',
       password: 'some-pass'
     });
+
     const title = req.body.title;
     const content = req.body.content;
     const categoryName = req.body.category;
-    console.log(`zavanton - category: ${categoryName}`);
 
-    let targetCategory;
-    targetCategory = await Category.findOne({name: categoryName});
-    if (!targetCategory) {
-      targetCategory = await Category.create({name: categoryName});
+    let category;
+    category = await Category.findOne({name: categoryName});
+    if (!category) {
+      category = await Category.create({name: categoryName});
     }
 
-    // const tags = req.body.tags;
-    // console.log(`zavanton - tags: ${tags}`);
+    const tags = req.body.tags;
+    const dbTags = [];
+    for (const tag of tags) {
+      let dbTag;
+      dbTag = await Tag.findOne({name: tag});
+      if (!dbTag) {
+        dbTag = await Tag.create({name: tag});
+      }
+      dbTags.push(dbTag);
+    }
+
+    _.forEach(dbTags, tag => {
+      console.log(`zavanton - dbTag: ${tag}`);
+    });
 
     const post = await Post.create({
       title: title,
       content: content,
       author: user,
-      category: targetCategory._id,
+      category: category._id,
     });
 
     return res.status(201).json({
