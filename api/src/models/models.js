@@ -18,12 +18,12 @@ const PostSchema = new Schema({
   //   type: Schema.Types.ObjecId,
   //   ref: 'Category'
   // },
-  tags: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Tag'
-    }
-  ]
+  // tags: [
+  //   {
+  //     type: Schema.Types.ObjectId,
+  //     ref: 'Tag'
+  //   }
+  // ]
 });
 
 
