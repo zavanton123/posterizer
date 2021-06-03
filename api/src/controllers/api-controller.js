@@ -1,4 +1,5 @@
 const Post = require('../models/posts');
+const {processError} = require("../utils/errors");
 
 exports.fetchPosts = async (req, res, next) => {
   try {
@@ -9,22 +10,26 @@ exports.fetchPosts = async (req, res, next) => {
         posts: posts
       });
     } else {
-      return res.json({
+      return res.status(200).json({
         message: "No posts found"
       });
     }
   } catch (err) {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    next(err);
+    processError(err, next);
   }
 };
 
 exports.createPost = async (req, res, next) => {
-  const post = await Post.create({title: req.body.title});
-  return res.json({
-    message: 'Post created',
-    post: post
-  });
+  try {
+    const post = await Post.create({title: req.body.title});
+    return res.status(201).json({
+      message: 'Post created',
+      post: {
+        _id: post._id,
+        title: post.title
+      }
+    });
+  } catch (error) {
+    processError(error, next);
+  }
 };
