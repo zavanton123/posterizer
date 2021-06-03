@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const ObjectId = Schema.Types.ObjectId;
 
 const PostSchema = new Schema({
   title: {
@@ -11,16 +12,16 @@ const PostSchema = new Schema({
     required: true
   },
   author: {
-    type: Schema.Types.ObjectId,
+    type: ObjectId,
     ref: 'User'
   },
   category: {
-    type: Schema.Types.ObjectId,
+    type: ObjectId,
     ref: 'Category'
   },
   tags: [
     {
-      type: Schema.Types.ObjectId,
+      type: ObjectId,
       ref: 'Tag'
     }
   ]
@@ -58,12 +59,11 @@ const TagSchema = new Schema({
   },
   posts: [
     {
-      type: Schema.Types.ObjectId,
+      type: ObjectId,
       ref: 'Post'
     }
   ]
 });
-
 
 
 const CommentSchema = new Schema({
@@ -72,11 +72,11 @@ const CommentSchema = new Schema({
     required: true
   },
   author: {
-    type: Schema.Types.ObjectId,
+    type: ObjectId,
     ref: 'Comment'
   },
   post: {
-    type: Schema.Types.ObjectId,
+    type: ObjectId,
     ref: 'Post'
   }
 });

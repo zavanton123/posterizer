@@ -77,6 +77,11 @@ exports.createPost = async (req, res, next) => {
       tags: tagIds
     });
 
+    for (const tag of tags) {
+      tag.posts.push(post);
+      tag.save();
+    }
+
     return res.status(201).json({
       message: 'Post created',
       post: {
@@ -146,9 +151,9 @@ const findOrCreate = async (name, Model) => {
 
 async function findOrCreateTags(req) {
   const tags = [];
-  for (const tag of req.body.tags) {
-    const dbTag = await findOrCreate(tag, Tag);
-    tags.push(dbTag);
+  for (const tagName of req.body.tags) {
+    const tag = await findOrCreate(tagName, Tag);
+    tags.push(tag);
   }
   return tags;
 }
