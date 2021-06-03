@@ -55,7 +55,6 @@ exports.fetchPostById = async (req, res, next) => {
 }
 
 exports.createPost = async (req, res, next) => {
-  console.log(`zavanton - create post`);
   try {
     // TODO - zavanton get from authorization header
     const user = await User.create({
@@ -64,34 +63,15 @@ exports.createPost = async (req, res, next) => {
       password: 'some-pass'
     });
 
-    const title = req.body.title;
-    const content = req.body.content;
-    const categoryName = req.body.category;
-
-    let category;
-    category = await Category.findOne({name: categoryName});
-    if (!category) {
-      category = await Category.create({name: categoryName});
-    }
-
-    const tags = req.body.tags;
-    const dbTags = [];
-    for (const tag of tags) {
-      let dbTag;
-      dbTag = await Tag.findOne({name: tag});
-      if (!dbTag) {
-        dbTag = await Tag.create({name: tag});
-      }
-      dbTags.push(dbTag);
-    }
-
-    const tagIds = _.map(dbTags, dbTag => {
+    const category = await findOrCreate(req.body.category, Category);
+    const tags = await findOrCreateTags(req);
+    const tagIds = _.map(tags, dbTag => {
       return dbTag._id;
     });
 
     const post = await Post.create({
-      title: title,
-      content: content,
+      title: req.body.title,
+      content: req.body.content,
       author: user,
       category: category._id,
       tags: tagIds
@@ -152,4 +132,23 @@ exports.updatePostById = async (req, res, next) => {
   // } catch (err) {
   //   processError(err, next);
   // }
+}
+
+
+const findOrCreate = async (name, Model) => {
+  let model;
+  model = await Model.findOne({name: name});
+  if (!model) {
+    model = await Model.create({name: name});
+  }
+  return model;
+}
+
+async function findOrCreateTags(req) {
+  const tags = [];
+  for (const tag of req.body.tags) {
+    const dbTag = await findOrCreate(tag, Tag);
+    tags.push(dbTag);
+  }
+  return tags;
 }
