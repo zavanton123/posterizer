@@ -85,8 +85,8 @@ exports.createPost = async (req, res, next) => {
       dbTags.push(dbTag);
     }
 
-    _.forEach(dbTags, tag => {
-      console.log(`zavanton - dbTag: ${tag}`);
+    const tagIds = _.map(dbTags, dbTag => {
+      return dbTag._id;
     });
 
     const post = await Post.create({
@@ -94,6 +94,7 @@ exports.createPost = async (req, res, next) => {
       content: content,
       author: user,
       category: category._id,
+      tags: tagIds
     });
 
     return res.status(201).json({
