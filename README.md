@@ -17,3 +17,5 @@ Create a file /api/.env
 - add validation
 - add tests
 - use typescript
+- use repository pattern
+- add auth

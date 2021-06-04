@@ -63,9 +63,7 @@ exports.createPost = async (req, res, next) => {
 
     const category = await findOrCreate(req.body.category, Category);
     const tags = await findOrCreateTags(req);
-    const tagIds = _.map(tags, dbTag => {
-      return dbTag._id;
-    });
+    const tagIds = _.map(tags, '_id');
 
     const post = await Post.create({
       title: req.body.title,
@@ -87,7 +85,8 @@ exports.createPost = async (req, res, next) => {
         title: post.title,
         content: post.content,
         author: user._id,
-        category: post.category._id
+        category: post.category._id,
+        tags: post.tags
       }
     });
   } catch (error) {
