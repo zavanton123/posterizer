@@ -24,7 +24,6 @@ Create a file /api/.env
 - clear references on post/user deletion
 
 ### Add endpoints
-- CRUD for comments
 - show posts by tag/category
 - show posts by user
 

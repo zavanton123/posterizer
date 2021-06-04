@@ -1,6 +1,7 @@
 const express = require('express');
 const apiController = require('../controllers/api-controller');
 const commentController = require('../controllers/comment-controller');
+const taxonomyController = require('../controllers/taxonomy-controller');
 const router = express.Router();
 
 // Post endpoints
@@ -11,10 +12,10 @@ router.delete('/posts/:postId', apiController.deletePostById);
 router.patch('/posts/:postId', apiController.updatePostById);
 
 // Categories endpoints
-router.get('/categories', apiController.fetchCategories);
+router.get('/categories', taxonomyController.fetchCategories);
 
 // Tags endpoints
-router.get('/tags', apiController.fetchTags);
+router.get('/tags', taxonomyController.fetchTags);
 
 // Comments endpoints
 router.post('/posts/:postId/comments', commentController.createComment);
