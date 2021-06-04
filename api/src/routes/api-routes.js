@@ -1,5 +1,6 @@
 const express = require('express');
 const apiController = require('../controllers/api-controller');
+const commentController = require('../controllers/comment-controller');
 const router = express.Router();
 
 // Post endpoints
@@ -16,7 +17,7 @@ router.get('/categories', apiController.fetchCategories);
 router.get('/tags', apiController.fetchTags);
 
 // Comments endpoints
-router.post('/posts/:postId/comments', apiController.createComment);
-router.delete('/posts/:postId/comments/:commentId', apiController.deleteComment);
+router.post('/posts/:postId/comments', commentController.createComment);
+router.delete('/posts/:postId/comments/:commentId', commentController.deleteComment);
 
 module.exports = router;
