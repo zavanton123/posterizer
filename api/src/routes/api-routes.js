@@ -1,8 +1,13 @@
 const express = require('express');
+const authController = require('../controllers/auth-controller');
 const apiController = require('../controllers/api-controller');
 const commentController = require('../controllers/comment-controller');
 const taxonomyController = require('../controllers/taxonomy-controller');
 const router = express.Router();
+
+// Auth endpoints
+router.post('/signup', authController.signup);
+router.post('/login', authController.login);
 
 // Post endpoints
 router.get('/posts/:postId', apiController.fetchPostById);

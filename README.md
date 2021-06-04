@@ -14,14 +14,15 @@ Create a file /api/.env
 
 
 ### TODO
+- add autEA
 - add validation
 - add tests
 - use typescript
 - use repository pattern
-- add auth
 - add pagination
 - email confirmation 
 - clear references on post/user deletion
+- add postman collection to project
 
 ### Add endpoints
 - show posts by tag/category
