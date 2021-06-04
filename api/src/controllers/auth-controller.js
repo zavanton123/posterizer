@@ -96,7 +96,7 @@ async function checkPassword(password, user) {
 function createToken(user) {
   return jwt.sign(
     {
-      id: user._id,
+      userId: user._id,
       username: user.username,
       email: user.email
     },
