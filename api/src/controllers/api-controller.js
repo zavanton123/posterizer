@@ -100,13 +100,10 @@ exports.deletePostById = async (req, res, next) => {
     const deletedPost = await Post.findByIdAndRemove(postId);
     if (deletedPost) {
       return res.status(200).json({
-        message: 'Removed post',
-        post: deletedPost
+        message: `Removed the post with id ${postId}`
       });
     } else {
-      return res.status(200).json({
-        message: `No post with id ${postId} is found.`
-      });
+      return res.status(200).json({message: `No post with id ${postId} is found.`});
     }
   } catch (err) {
     processError(err, next);
@@ -114,28 +111,39 @@ exports.deletePostById = async (req, res, next) => {
 }
 
 exports.updatePostById = async (req, res, next) => {
-  return next();
-  // try {
-  //   const postId = req.params.postId;
-  //   const post = await Post.findByIdAndUpdate(postId, {title: req.body.title});
-  //   if (post) {
-  //     return res.status(200).json({
-  //       message: "Post is updated",
-  //       post: {
-  //         _id: post._id,
-  //         title: post.title
-  //       }
-  //     });
-  //   } else {
-  //     return res.json({
-  //       message: `No post with id ${postId} is found.`
-  //     });
-  //   }
-  // } catch (err) {
-  //   processError(err, next);
-  // }
-}
+  try {
+    // TODO - zavanton get from authorization header
+    const user = await User.create({
+      username: 'zavanton',
+      email: 'zavanton@yandex.ru',
+      password: 'some-pass'
+    });
 
+    const category = await findOrCreate(req.body.category, Category);
+    const tags = await findOrCreateTags(req);
+    const tagIds = _.map(tags, '_id');
+
+    const postId = req.params.postId;
+    const post = await Post.findByIdAndUpdate(postId, {
+      title: req.body.title,
+      content: req.body.content,
+      author: user._id,
+      category: category,
+      tags: tagIds
+    });
+
+    if (post) {
+      return res.status(200).json({
+        message: "Post is updated",
+        post: post
+      });
+    } else {
+      return res.json({message: `No post with id ${postId} is found.`});
+    }
+  } catch (err) {
+    processError(err, next);
+  }
+}
 
 const findOrCreate = async (name, Model) => {
   let model;
