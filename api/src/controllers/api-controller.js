@@ -1,13 +1,7 @@
 const _ = require('lodash');
 const models = require('../models/models');
 const {processError} = require("../utils/errors");
-
-const {
-  Post,
-  User,
-  Tag,
-  Category,
-} = models;
+const {Post, User, Tag, Category} = models;
 
 exports.fetchPosts = async (req, res, next) => {
   try {
@@ -16,6 +10,7 @@ exports.fetchPosts = async (req, res, next) => {
       'title': 1,
       'content': 1,
       'author': 1,
+      'category': 1,
       'tags': 1
     });
     if (posts.length > 0) {
@@ -36,18 +31,21 @@ exports.fetchPosts = async (req, res, next) => {
 exports.fetchPostById = async (req, res, next) => {
   try {
     const postId = req.params.postId;
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId, {
+      '_id': 1,
+      'title': 1,
+      'content': 1,
+      'author': 1,
+      'category': 1,
+      'tags': 1
+    });
     if (post) {
       return res.status(200).json({
         message: "Post is found",
-        post: {
-          post: post
-        }
+        post: post
       });
     } else {
-      return res.json({
-        message: `No post with id ${postId} is found.`
-      });
+      return res.json({message: `No post with id ${postId} is found.`});
     }
   } catch (err) {
     processError(err, next);

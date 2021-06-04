@@ -11,3 +11,9 @@ Create a file /api/.env
 > DBUSER=some-user-name
 >
 > DBPASSWORD=some-password
+
+
+### TODO
+- add validation
+- add tests
+- use typescript
