@@ -5,36 +5,6 @@ const {HTTP_CREATED, HTTP_CONFLICT_ERROR, HTTP_NOT_AUTHENTICATED} = require("../
 const {User} = require('../models/models');
 const {APP_SECRET} = process.env;
 
-const checkUserExists = async (username) => {
-  const user = await User.findOne({username: username});
-  if (!user) {
-    const error = new Error('The user with this username does not exist');
-    error.statusCode = HTTP_NOT_AUTHENTICATED;
-    throw error;
-  }
-  return user;
-}
-
-const checkPassword = async (password, user) => {
-  const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
-    const error = new Error('Wrong password!');
-    error.statusCode = HTTP_NOT_AUTHENTICATED;
-    throw error;
-  }
-}
-
-function createToken(user) {
-  return jwt.sign(
-    {
-      id: user._id,
-      username: user.username,
-      email: user.email
-    },
-    APP_SECRET,
-    {expiresIn: '1d'}
-  );
-}
 
 exports.login = async (req, res, next) => {
   try {
@@ -102,4 +72,35 @@ function ensureEqualPasswords(password, confirmPassword) {
     error.statusCode = HTTP_CONFLICT_ERROR;
     throw error;
   }
+}
+
+async function checkUserExists(username) {
+  const user = await User.findOne({username: username});
+  if (!user) {
+    const error = new Error('The user with this username does not exist');
+    error.statusCode = HTTP_NOT_AUTHENTICATED;
+    throw error;
+  }
+  return user;
+}
+
+async function checkPassword(password, user) {
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) {
+    const error = new Error('Wrong password!');
+    error.statusCode = HTTP_NOT_AUTHENTICATED;
+    throw error;
+  }
+}
+
+function createToken(user) {
+  return jwt.sign(
+    {
+      id: user._id,
+      username: user.username,
+      email: user.email
+    },
+    APP_SECRET,
+    {expiresIn: '1d'}
+  );
 }
