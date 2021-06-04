@@ -19,3 +19,11 @@ Create a file /api/.env
 - use typescript
 - use repository pattern
 - add auth
+- add pagination
+
+### Add endpoints
+- show all tags
+- show all categories
+- show posts by tag/category
+- show posts by user
+
