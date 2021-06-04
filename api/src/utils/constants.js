@@ -1,2 +1,4 @@
 exports.APP_PORT = 3000;
-exports.SERVER_ERROR = 500;
+
+exports.HTTP_SERVER_ERROR = 500;
+exports.HTTP_CONFLICT_ERROR = 409;

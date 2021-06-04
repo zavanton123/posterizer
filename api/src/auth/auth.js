@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const {SERVER_ERROR} = require("../utils/constants");
+const {HTTP_SERVER_ERROR} = require("../utils/constants");
 
 module.exports = (req, res, next) => {
   const authHeader = req.get('Authorization');
@@ -13,7 +13,7 @@ module.exports = (req, res, next) => {
   try {
     decodedToken = jwt.verify(token, "helloworldsecretkey");
   } catch (err) {
-    err.statusCode = SERVER_ERROR;
+    err.statusCode = HTTP_SERVER_ERROR;
     throw err;
   }
   if (!decodedToken) {

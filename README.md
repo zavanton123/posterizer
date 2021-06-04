@@ -23,6 +23,7 @@ Create a file /api/.env
 - email confirmation 
 - clear references on post/user deletion
 - add postman collection to project
+- add unique username/email constraints to db schema
 
 ### Add endpoints
 - show posts by tag/category
