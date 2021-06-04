@@ -20,10 +20,11 @@ Create a file /api/.env
 - use repository pattern
 - add auth
 - add pagination
+- email confirmation 
+- clear references on post/user deletion
 
 ### Add endpoints
-- show all tags
-- show all categories
+- CRUD for comments
 - show posts by tag/category
 - show posts by user
 

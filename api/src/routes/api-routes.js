@@ -15,4 +15,7 @@ router.get('/categories', apiController.fetchCategories);
 // Tags endpoints
 router.get('/tags', apiController.fetchTags);
 
+// Comments endpoints
+router.post('/posts/:postId/comments', apiController.createComment);
+
 module.exports = router;

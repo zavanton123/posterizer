@@ -2,6 +2,17 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
+const CommentSchema = new Schema({
+  content: {
+    type: String,
+    required: true
+  },
+  author: {
+    type: ObjectId,
+    ref: 'User'
+  }
+});
+
 const PostSchema = new Schema({
   title: {
     type: String,
@@ -24,9 +35,9 @@ const PostSchema = new Schema({
       type: ObjectId,
       ref: 'Tag'
     }
-  ]
+  ],
+  comments: [CommentSchema]
 });
-
 
 const UserSchema = new Schema({
   username: {
@@ -43,14 +54,12 @@ const UserSchema = new Schema({
   }
 });
 
-
 const CategorySchema = new Schema({
   name: {
     type: String,
     required: true
   }
 });
-
 
 const TagSchema = new Schema({
   name: {
@@ -66,23 +75,7 @@ const TagSchema = new Schema({
 });
 
 
-const CommentSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  author: {
-    type: ObjectId,
-    ref: 'Comment'
-  },
-  post: {
-    type: ObjectId,
-    ref: 'Post'
-  }
-});
-
 exports.Post = mongoose.model('Post', PostSchema);
-exports.Tag = mongoose.model('Tag', TagSchema);
-exports.Comment = mongoose.model('Comment', CommentSchema);
 exports.User = mongoose.model('User', UserSchema);
 exports.Category = mongoose.model('Category', CategorySchema);
+exports.Tag = mongoose.model('Tag', TagSchema);

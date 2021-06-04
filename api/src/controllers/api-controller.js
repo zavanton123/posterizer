@@ -11,7 +11,8 @@ exports.fetchPosts = async (req, res, next) => {
       'content': 1,
       'author': 1,
       'category': 1,
-      'tags': 1
+      'tags': 1,
+      'comments': 1
     });
     if (posts.length > 0) {
       return res.json({
@@ -37,7 +38,8 @@ exports.fetchPostById = async (req, res, next) => {
       'content': 1,
       'author': 1,
       'category': 1,
-      'tags': 1
+      'tags': 1,
+      'comments': 1
     });
     if (post) {
       return res.status(200).json({
@@ -177,6 +179,42 @@ exports.fetchTags = async (req, res, next) => {
   }
 }
 
+exports.createComment = async (req, res, next) => {
+  try {
+    // TODO - zavanton get from authorization header
+    const user = await User.create({
+      username: 'zavanton',
+      email: 'zavanton@yandex.ru',
+      password: 'some-pass'
+    });
+
+    const postId = req.params.postId;
+    const content = req.body.content;
+
+    const result = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $push: {
+          comments: {
+            author: user._id,
+            content: content
+          }
+        }
+      }
+    );
+    console.log(`zavanton - result: ${result}`);
+
+    if (result) {
+      return res.json({
+        message: 'Comment added'
+      });
+    } else {
+      return res.json({message: 'Failed to add the comment'});
+    }
+  } catch (err) {
+    processError(err, next);
+  }
+}
 
 const findOrCreate = async (name, Model) => {
   let model;
