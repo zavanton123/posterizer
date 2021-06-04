@@ -1,3 +1,4 @@
+const {HTTP_OK, HTTP_CREATED} = require('../utils/constants');
 const _ = require('lodash');
 const models = require('../models/models');
 const {processError} = require("../utils/errors");
@@ -20,7 +21,7 @@ exports.fetchPosts = async (req, res, next) => {
         posts: posts
       });
     } else {
-      return res.status(200).json({
+      return res.status(HTTP_OK).json({
         message: "No posts found"
       });
     }
@@ -42,7 +43,7 @@ exports.fetchPostById = async (req, res, next) => {
       'comments': 1
     });
     if (post) {
-      return res.status(200).json({
+      return res.status(HTTP_OK).json({
         message: "Post is found",
         post: post
       });
@@ -80,7 +81,7 @@ exports.createPost = async (req, res, next) => {
       tag.save();
     }
 
-    return res.status(201).json({
+    return res.status(HTTP_CREATED).json({
       message: 'Post created',
       post: {
         id: post._id,
@@ -101,11 +102,11 @@ exports.deletePostById = async (req, res, next) => {
     const postId = req.params.postId;
     const deletedPost = await Post.findByIdAndRemove(postId);
     if (deletedPost) {
-      return res.status(200).json({
+      return res.status(HTTP_OK).json({
         message: `Removed the post with id ${postId}`
       });
     } else {
-      return res.status(200).json({message: `No post with id ${postId} is found.`});
+      return res.status(HTTP_OK).json({message: `No post with id ${postId} is found.`});
     }
   } catch (err) {
     processError(err, next);
@@ -135,7 +136,7 @@ exports.updatePostById = async (req, res, next) => {
     });
 
     if (post) {
-      return res.status(200).json({
+      return res.status(HTTP_OK).json({
         message: "Post is updated",
         post: post
       });

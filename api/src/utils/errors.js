@@ -1,7 +1,9 @@
 // Global method to process errors
-exports.processError = (err, next)  =>  {
+const {HTTP_SERVER_ERROR} = require("./constants");
+
+exports.processError = (err, next) => {
   if (!err.statusCode) {
-    err.statusCode = 500;
+    err.statusCode = HTTP_SERVER_ERROR;
   }
   next(err);
 }

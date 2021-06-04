@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const {processError} = require("../utils/errors");
-const {HTTP_CONFLICT_ERROR} = require("../utils/constants");
+const {HTTP_CREATED, HTTP_CONFLICT_ERROR} = require("../utils/constants");
 const {User} = require('../models/models');
 
 exports.login = (req, res, next) => {
@@ -21,7 +21,7 @@ exports.signup = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 12);
     const savedUser = await User.create({username: username, email: email, password: hashedPassword});
 
-    return res.json({
+    return res.status(HTTP_CREATED).json({
       message: 'A new user saved successfully',
       user: {
         username: savedUser.username,
