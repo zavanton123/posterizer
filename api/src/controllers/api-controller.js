@@ -202,14 +202,42 @@ exports.createComment = async (req, res, next) => {
         }
       }
     );
-    console.log(`zavanton - result: ${result}`);
-
     if (result) {
       return res.json({
         message: 'Comment added'
       });
     } else {
       return res.json({message: 'Failed to add the comment'});
+    }
+  } catch (err) {
+    processError(err, next);
+  }
+}
+
+exports.deleteComment = async (req, res, next) => {
+  console.log(`zavanton - deleteComment`);
+  try {
+    const postId = req.params.postId;
+    console.log(`zavanton - postId: ${postId}`);
+
+    const commentId = req.params.commentId;
+    console.log(`zavanton - commentId: ${commentId}`);
+
+    const result = await Post.findByIdAndUpdate(
+      postId,
+      {
+        $pull: {
+          comments: {
+            _id: commentId
+          }
+        }
+      }
+    );
+    console.log(`zavanton - result: ${result}`);
+    if (result) {
+      return res.json({message: 'The comment is removed'});
+    } else {
+      return res.json({messaged: 'Failed to remove the comment'});
     }
   } catch (err) {
     processError(err, next);

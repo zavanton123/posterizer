@@ -17,5 +17,6 @@ router.get('/tags', apiController.fetchTags);
 
 // Comments endpoints
 router.post('/posts/:postId/comments', apiController.createComment);
+router.delete('/posts/:postId/comments/:commentId', apiController.deleteComment);
 
 module.exports = router;
