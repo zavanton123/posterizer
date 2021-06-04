@@ -1,0 +1,324 @@
+{
+	"info": {
+		"_postman_id": "8851f4cb-dc75-43e8-8435-710f9ad16a69",
+		"name": "Posterizer",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "localhost:3000/api",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"posts",
+						"60b9d99bc872a7001b31e0a7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/posts",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Express CRUD\",\n    \"content\": \"This is my first post\",\n    \"category\": \"Backend\",\n    \"tags\": [\n        \"ts\",\n        \"js\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/posts",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"posts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\": \"Some title here\",\n    \"content\": \"This is updated content\",\n    \"category\": \"Greate\",\n    \"tags\": [\n        \"java\",\n        \"python\", \n        \"js\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"posts",
+						"60b9d99bc872a7001b31e0a7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/posts/60b9da5375e44c001c6470a7",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/posts/60b9da5375e44c001c6470a7",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"posts",
+						"60b9da5375e44c001c6470a7"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/categories",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/categories",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"categories"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/tags",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/tags",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"tags"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7/comments",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"content\": \"This post sucks!\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7/comments",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"posts",
+						"60b9d99bc872a7001b31e0a7",
+						"comments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7/comments/60b9f44aa3f23e001b30d4e9",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7/comments/60b9f44aa3f23e001b30d4e9",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"posts",
+						"60b9d99bc872a7001b31e0a7",
+						"comments",
+						"60b9f44aa3f23e001b30d4e9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/signup",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"zavanton3\",\n    \"email\": \"zavanton3@yandex.ru\",\n    \"password\": \"some-password\",\n    \"confirm-password\": \"some-password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/signup",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"signup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/api/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"zavanton\",\n    \"password\": \"some-password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/login",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

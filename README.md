@@ -2,19 +2,15 @@
 
 ### How to run a debug build?
 Create a file /api/.env
-> DBHOST=localhost
+> APP_SECRET=some-secret
 >
 > DBPORT=27017
 >
 > DBNAME=posterizer
 >
-> DBUSER=some-user-name
->
-> DBPASSWORD=some-password
 
 
 ### TODO
-- add autEA
 - add validation
 - add tests
 - use typescript
@@ -22,7 +18,6 @@ Create a file /api/.env
 - add pagination
 - email confirmation 
 - clear references on post/user deletion
-- add postman collection to project
 - add unique username/email constraints to db schema
 
 ### Add endpoints
