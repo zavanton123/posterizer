@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {isAuthenticated} = require("../auth/auth");
+const {isAuthenticated} = require('../auth/auth');
 const authController = require('../controllers/auth-controller');
 const apiController = require('../controllers/post-controller');
 const commentController = require('../controllers/comment-controller');

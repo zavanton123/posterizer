@@ -11,7 +11,6 @@ Create a file /api/.env
 
 
 ### TODO
-- update access policy (everybody can view posts, but only the authors can create/update/delete)
 - add validation
 - add tests
 - use typescript
@@ -22,11 +21,8 @@ Create a file /api/.env
 - add unique username/email constraints to db schema
 - add file uploads
 - add web socket (Socket.IO)
-- wrap bcrypt in try catch
 - pass some param in query (pageNum, etc.)
 - use 'populate' (e.g. with Post model)
-- add 404 error - post (tag, category, etc.) not found
-- add 403 error (e.g. wrong user tries to edit the post)
 - add graphql
 
 
