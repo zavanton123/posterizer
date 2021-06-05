@@ -2,57 +2,66 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
-const CommentSchema = new Schema({
-  content: {
-    type: String,
-    required: true
-  },
-  author: {
-    type: ObjectId,
-    ref: 'User'
-  }
-});
-
-const PostSchema = new Schema({
-  title: {
-    type: String,
-    required: true
-  },
-  content: {
-    type: String,
-    required: true
-  },
-  author: {
-    type: ObjectId,
-    ref: 'User'
-  },
-  category: {
-    type: ObjectId,
-    ref: 'Category'
-  },
-  tags: [
-    {
+const CommentSchema = new Schema(
+  {
+    content: {
+      type: String,
+      required: true
+    },
+    author: {
       type: ObjectId,
-      ref: 'Tag'
+      ref: 'User'
     }
-  ],
-  comments: [CommentSchema]
-});
+  },
+  {timestamps: true}
+);
 
-const UserSchema = new Schema({
-  username: {
-    type: String,
-    required: true
+const PostSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true
+    },
+    content: {
+      type: String,
+      required: true
+    },
+    author: {
+      type: ObjectId,
+      ref: 'User'
+    },
+    category: {
+      type: ObjectId,
+      ref: 'Category'
+    },
+    tags: [
+      {
+        type: ObjectId,
+        ref: 'Tag'
+      }
+    ],
+    comments: [CommentSchema]
   },
-  email: {
-    type: String,
-    required: true
+  {timestamps: true}
+);
+
+const UserSchema = new Schema(
+  {
+    username: {
+      type: String,
+      required: true
+    },
+    email: {
+      type: String,
+      required: true
+    },
+    password: {
+      type: String,
+      required: true
+    }
   },
-  password: {
-    type: String,
-    required: true
-  }
-});
+  {timestamps: true}
+);
 
 const CategorySchema = new Schema({
   name: {

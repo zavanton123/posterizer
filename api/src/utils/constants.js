@@ -12,6 +12,7 @@ exports.AUTHORIZATION_HEADER ='Authorization';
 // Success codes
 exports.HTTP_CREATED = 201;
 exports.HTTP_OK = 200;
+exports.HTTP_NO_CONTENT = 204;
 
 // Client error codes
 exports.HTTP_NOT_AUTHENTICATED = 401;
