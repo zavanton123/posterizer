@@ -1,23 +1,28 @@
 const models = require('../models/models');
 const {processError} = require("../utils/errors");
-const {Post, User} = models;
+const {Post} = models;
+const {HTTP_CREATED, HTTP_NOT_FOUND} = require('../utils/constants');
 
 exports.createComment = async (req, res, next) => {
   try {
-    // TODO - zavanton get from authorization header
-    const user = await User.create({
-      username: 'zavanton',
-      email: 'zavanton@yandex.ru',
-      password: 'some-pass'
-    });
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.postId,
+      {
+        $push:
+          {
+            comments: {
+              author: req.userId,
+              content: req.body.content
+            }
+          }
+      }
+    );
 
-    const postId = req.params.postId;
-    const content = req.body.content;
-    const result = await Post.findByIdAndUpdate(postId, {$push: {comments: {author: user._id, content: content}}});
-    if (result) {
-      return res.json({message: 'Comment added'});
+    if (updatedPost) {
+      return res.status(HTTP_CREATED)
+        .json({message: 'Comment added'});
     } else {
-      return res.json({message: 'Failed to add the comment'});
+      return res.status(HTTP_NOT_FOUND).json({});
     }
   } catch (err) {
     processError(err, next);
