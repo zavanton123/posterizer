@@ -74,7 +74,6 @@ const TagSchema = new Schema({
   ]
 });
 
-
 exports.Post = mongoose.model('Post', PostSchema);
 exports.User = mongoose.model('User', UserSchema);
 exports.Category = mongoose.model('Category', CategorySchema);

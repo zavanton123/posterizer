@@ -1,26 +1,15 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const {processError} = require("../utils/errors");
-const {HTTP_CREATED, HTTP_CONFLICT_ERROR, HTTP_NOT_AUTHENTICATED} = require("../utils/constants");
 const {User} = require('../models/models');
 const {APP_SECRET} = process.env;
+const {
+  HTTP_CREATED,
+  HTTP_CONFLICT_ERROR,
+  HTTP_NOT_AUTHENTICATED,
+  JWT_TOKEN_DURATION
+} = require("../utils/constants");
 
-
-exports.login = async (req, res, next) => {
-  try {
-    const user = await checkUserExists(req.body.username);
-    await checkPassword(req.body.password, user)
-    const token = createToken(user);
-
-    return res.json({
-      message: "Login success",
-      id: user._id,
-      token: token
-    });
-  } catch (err) {
-    processError(err, next);
-  }
-}
 
 exports.signup = async (req, res, next) => {
   const username = req.body.username;
@@ -34,13 +23,13 @@ exports.signup = async (req, res, next) => {
     ensureEqualPasswords(password, confirmPassword);
 
     const hashedPassword = await bcrypt.hash(password, 12);
-    const savedUser = await User.create({username: username, email: email, password: hashedPassword});
+    const user = await User.create({username: username, email: email, password: hashedPassword});
 
     return res.status(HTTP_CREATED).json({
       message: 'A new user saved successfully',
       user: {
-        username: savedUser.username,
-        email: savedUser.email
+        username: user.username,
+        email: user.email
       }
     });
   } catch (err) {
@@ -48,18 +37,18 @@ exports.signup = async (req, res, next) => {
   }
 }
 
-async function ensureUniqueUsername(username, next) {
-  const dbUser = await User.find({username: username});
-  if (dbUser.length > 0) {
+async function ensureUniqueUsername(username) {
+  const user = await User.find({username: username});
+  if (user.length > 0) {
     const error = new Error(`A user with the username ${username} already exists!`);
     error.statusCode = HTTP_CONFLICT_ERROR;
     throw error;
   }
 }
 
-async function ensureUniqueEmail(email, next, res) {
-  const emailUser = await User.find({email: email});
-  if (emailUser.length > 0) {
+async function ensureUniqueEmail(email) {
+  const user = await User.findOne({email: email});
+  if (user) {
     const error = new Error(`A user with the email ${email} already exists!`);
     error.statusCode = HTTP_CONFLICT_ERROR;
     throw error;
@@ -71,6 +60,18 @@ function ensureEqualPasswords(password, confirmPassword) {
     const error = new Error(`The confirm password must be the same as the password!`);
     error.statusCode = HTTP_CONFLICT_ERROR;
     throw error;
+  }
+}
+
+exports.login = async (req, res, next) => {
+  try {
+    const user = await checkUserExists(req.body.username);
+    await checkPassword(req.body.password, user)
+
+    const token = createToken(user);
+    return res.json({id: user._id, token: token});
+  } catch (err) {
+    processError(err, next);
   }
 }
 
@@ -95,12 +96,8 @@ async function checkPassword(password, user) {
 
 function createToken(user) {
   return jwt.sign(
-    {
-      userId: user._id,
-      username: user.username,
-      email: user.email
-    },
+    {userId: user._id, username: user.username, email: user.email},
     APP_SECRET,
-    {expiresIn: '1d'}
+    {expiresIn: JWT_TOKEN_DURATION}
   );
 }

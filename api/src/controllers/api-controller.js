@@ -1,8 +1,8 @@
-const {HTTP_OK, HTTP_CREATED} = require('../utils/constants');
 const _ = require('lodash');
-const models = require('../models/models');
+const {HTTP_OK, HTTP_CREATED} = require('../utils/constants');
+const {Post, User, Tag, Category} = require('../models/models');
 const {processError} = require("../utils/errors");
-const {Post, User, Tag, Category} = models;
+
 
 exports.fetchPosts = async (req, res, next) => {
   try {
@@ -157,12 +157,11 @@ const findOrCreate = async (name, Model) => {
   return model;
 }
 
-async function findOrCreateTags(req) {
+const findOrCreateTags = async req => {
   const tags = [];
   for (const tagName of req.body.tags) {
     const tag = await findOrCreate(tagName, Tag);
     tags.push(tag);
   }
   return tags;
-}
-
+};

@@ -1,10 +1,9 @@
-const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
-const apiRouter = require('./routes/api-routes');
+const bodyParser = require('body-parser');
 const db = require('./database/connection');
-const {APP_PORT} = require("./utils/constants");
-const {HTTP_SERVER_ERROR} = require("./utils/constants");
+const apiRouter = require('./routes/api-routes');
+const {APP_PORT, HTTP_SERVER_ERROR} = require("./utils/constants");
 
 // Setup body-parser
 app.use(bodyParser.json());

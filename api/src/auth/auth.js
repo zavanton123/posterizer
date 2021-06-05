@@ -4,16 +4,14 @@ const {APP_SECRET} = process.env;
 
 exports.isAuthenticated = (req, res, next) => {
   const authHeader = req.get(AUTHORIZATION_HEADER);
-  console.log(`zavanton - authHeader: ${authHeader}`);
-
   if (!authHeader) {
     const error = new Error('Not authenticated');
     error.statusCode = HTTP_NOT_AUTHENTICATED;
     throw error;
   }
-  const token = authHeader.split(' ')[1];
-  console.log(`zavanton - token: ${token}`);
 
+  // Authorization: Bearer some-token-here
+  const token = authHeader.split(' ')[1];
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, APP_SECRET);
@@ -21,7 +19,6 @@ exports.isAuthenticated = (req, res, next) => {
     err.statusCode = HTTP_SERVER_ERROR;
     throw err;
   }
-  console.log(`zavanton - decodedToken: ${decodedToken}`);
 
   if (!decodedToken) {
     const error = new Error('Not authenticated');
@@ -29,7 +26,7 @@ exports.isAuthenticated = (req, res, next) => {
     throw error;
   }
   req.userId = decodedToken.userId;
-  console.log(`zavanton - user id: ${req.userId}`);
-
+  req.username = decodedToken.username;
+  req.email = decodedToken.email;
   next();
 }
