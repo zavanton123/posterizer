@@ -20,9 +20,7 @@ exports.fetchPosts = async (req, res, next) => {
         posts: posts
       });
     } else {
-      return res.status(HTTP_OK).json({
-        message: 'Posts not found'
-      });
+      return res.status(HTTP_OK).json([]);
     }
   } catch (err) {
     processError(err, next);
@@ -33,11 +31,9 @@ exports.fetchPostById = async (req, res, next) => {
   try {
     const post = await Post.findById(req.params.postId, {'__v': 0});
     if (post) {
-      return res.status(HTTP_OK)
-        .json({post: post});
+      return res.status(HTTP_OK).json({post: post});
     } else {
-      return res.status(HTTP_NOT_FOUND)
-        .json({message: `No post found.`});
+      return res.status(HTTP_NOT_FOUND).json({});
     }
   } catch (err) {
     processError(err, next);
@@ -63,8 +59,7 @@ exports.createPost = async (req, res, next) => {
       tag.posts.push(post);
       await tag.save();
     }
-    return res.status(HTTP_CREATED)
-      .json({post: post});
+    return res.status(HTTP_CREATED).json({post: post});
   } catch (error) {
     processError(error, next);
   }
@@ -76,11 +71,35 @@ exports.deletePostById = async (req, res, next) => {
     await checkPost(req);
     const deletedPost = await Post.findByIdAndRemove(req.params.postId);
     if (deletedPost) {
-      return res.status(HTTP_NO_CONTENT)
-        .json({message: 'Post removed'});
+      return res.status(HTTP_NO_CONTENT).json({});
     } else {
-      return res.status(HTTP_NOT_FOUND)
-        .json({message: 'Post not found'});
+      return res.status(HTTP_NOT_FOUND).json({});
+    }
+  } catch (err) {
+    processError(err, next);
+  }
+}
+
+exports.updatePostById = async (req, res, next) => {
+  try {
+    await checkPost(req);
+
+    const category = await findOrCreate(req.body.category, Category);
+    const tags = await findOrCreateTags(req);
+    const tagIds = _.map(tags, '_id');
+
+    const postId = req.params.postId;
+    const post = await Post.findByIdAndUpdate(postId, {
+      title: req.body.title,
+      content: req.body.content,
+      category: category,
+      tags: tagIds
+    });
+
+    if (post) {
+      return res.status(HTTP_NO_CONTENT).json({});
+    } else {
+      return res.status(HTTP_NOT_FOUND).json({});
     }
   } catch (err) {
     processError(err, next);
@@ -101,41 +120,6 @@ const checkPost = async (req) => {
     const error = new Error('Only authors can edit or delete their posts');
     error.statusCode = HTTP_FORBIDDEN;
     throw error;
-  }
-}
-
-exports.updatePostById = async (req, res, next) => {
-  try {
-    // TODO - zavanton get from authorization header
-    const user = await User.create({
-      username: 'zavanton',
-      email: 'zavanton@yandex.ru',
-      password: 'some-pass'
-    });
-
-    const category = await findOrCreate(req.body.category, Category);
-    const tags = await findOrCreateTags(req);
-    const tagIds = _.map(tags, '_id');
-
-    const postId = req.params.postId;
-    const post = await Post.findByIdAndUpdate(postId, {
-      title: req.body.title,
-      content: req.body.content,
-      author: user._id,
-      category: category,
-      tags: tagIds
-    });
-
-    if (post) {
-      return res.status(HTTP_OK).json({
-        message: "Post is updated",
-        post: post
-      });
-    } else {
-      return res.json({message: `No post with id ${postId} is found.`});
-    }
-  } catch (err) {
-    processError(err, next);
   }
 }
 
