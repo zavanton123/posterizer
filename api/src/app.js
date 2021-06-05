@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const db = require('./database/connection');
 const apiRouter = require('./routes/api-routes');
-const {APP_PORT, HTTP_SERVER_ERROR} = require("./utils/constants");
+const {APP_PORT, HTTP_SERVER_ERROR} = require('./utils/constants');
 
 // Setup body-parser
 app.use(bodyParser.json());
@@ -36,6 +36,6 @@ app.use((error, req, res, next) => {
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
-  console.log(`zavanton - connected to MongoDB`);
+  console.log('zavanton - connected to MongoDB');
   app.listen(APP_PORT);
 });

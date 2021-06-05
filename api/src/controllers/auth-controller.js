@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const {processError} = require("../utils/errors");
+const {processError} = require('../utils/errors');
 const {User} = require('../models/models');
 const {APP_SECRET} = process.env;
 const {
@@ -8,7 +8,7 @@ const {
   HTTP_CONFLICT_ERROR,
   HTTP_NOT_AUTHENTICATED,
   JWT_TOKEN_DURATION
-} = require("../utils/constants");
+} = require('../utils/constants');
 
 
 exports.signup = async (req, res, next) => {
@@ -57,7 +57,7 @@ async function ensureUniqueEmail(email) {
 
 function ensureEqualPasswords(password, confirmPassword) {
   if (password !== confirmPassword) {
-    const error = new Error(`The confirm password must be the same as the password!`);
+    const error = new Error('The confirm password must be the same as the password!');
     error.statusCode = HTTP_CONFLICT_ERROR;
     throw error;
   }
