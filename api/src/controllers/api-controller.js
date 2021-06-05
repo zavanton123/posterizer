@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const {HTTP_OK, HTTP_CREATED} = require('../utils/constants');
+const {HTTP_OK, HTTP_CREATED, HTTP_NOT_FOUND} = require('../utils/constants');
 const {Post, User, Tag, Category} = require('../models/models');
 const {processError} = require("../utils/errors");
 
@@ -15,8 +15,9 @@ exports.fetchPosts = async (req, res, next) => {
       'tags': 1,
       'comments': 1
     });
+
     if (posts.length > 0) {
-      return res.json({
+      return res.status(HTTP_OK).json({
         message: `Found ${posts.length} posts`,
         posts: posts
       });
@@ -42,13 +43,15 @@ exports.fetchPostById = async (req, res, next) => {
       'tags': 1,
       'comments': 1
     });
+
     if (post) {
       return res.status(HTTP_OK).json({
         message: "Post is found",
         post: post
       });
     } else {
-      return res.json({message: `No post with id ${postId} is found.`});
+      return res.status(HTTP_NOT_FOUND)
+        .json({message: `No post with id ${postId} is found.`});
     }
   } catch (err) {
     processError(err, next);
@@ -57,40 +60,27 @@ exports.fetchPostById = async (req, res, next) => {
 
 exports.createPost = async (req, res, next) => {
   try {
-    // TODO - zavanton get from authorization header
-    const user = await User.create({
-      username: 'zavanton',
-      email: 'zavanton@yandex.ru',
-      password: 'some-pass'
-    });
-
     const category = await findOrCreate(req.body.category, Category);
     const tags = await findOrCreateTags(req);
     const tagIds = _.map(tags, '_id');
 
+    // Note: author id is taken from the Authorization header
     const post = await Post.create({
       title: req.body.title,
       content: req.body.content,
-      author: user,
+      author: req.userId,
       category: category._id,
       tags: tagIds
     });
 
     for (const tag of tags) {
       tag.posts.push(post);
-      tag.save();
+      await tag.save();
     }
 
     return res.status(HTTP_CREATED).json({
       message: 'Post created',
-      post: {
-        id: post._id,
-        title: post.title,
-        content: post.content,
-        author: user._id,
-        category: post.category._id,
-        tags: post.tags
-      }
+      post: post
     });
   } catch (error) {
     processError(error, next);

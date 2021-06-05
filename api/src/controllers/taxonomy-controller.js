@@ -1,6 +1,7 @@
 const models = require('../models/models');
-const {processError} = require("../utils/errors");
 const {Tag, Category} = models;
+const {processError} = require("../utils/errors");
+
 
 exports.fetchCategories = async (req, res, next) => {
   try {
