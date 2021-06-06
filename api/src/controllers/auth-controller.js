@@ -14,12 +14,20 @@ const {
 
 
 exports.signup = async (req, res, next) => {
-  const username = req.body.username;
-  const email = req.body.email;
-  const password = req.body.password;
-  const confirmPassword = req.body['confirm-password'];
-
   try {
+    // validate the request
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const error = new Error('Validation failed');
+      error.statusCode = HTTP_UNPROCESSABLE_ENTITY;
+      throw error;
+    }
+
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmPassword = req.body['confirm-password'];
+
     await ensureUniqueUsername(username, next);
     await ensureUniqueEmail(email, next, res);
     ensureEqualPasswords(password, confirmPassword);
@@ -71,7 +79,7 @@ exports.login = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const error = new Error('Validation failed');
-      error.statusCode = HTTP_UNPROCESSABLE_ENTITY;;
+      error.statusCode = HTTP_UNPROCESSABLE_ENTITY;
       throw error;
     }
     // check user and password

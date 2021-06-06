@@ -3,6 +3,7 @@ exports.APP_PORT = 3000;
 
 // JWT Token Duration
 exports.JWT_TOKEN_DURATION = '1d'
+exports.PASSWORD_MIN_LENGTH = 10;
 
 // Headers
 // Authorization header is like this:
