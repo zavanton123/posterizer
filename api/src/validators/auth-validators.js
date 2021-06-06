@@ -1,3 +1,4 @@
+const {HTTP_NOT_AUTHENTICATED} = require("../utils/constants");
 const {body} = require('express-validator');
 const {User} = require('../models/models');
 const {PASSWORD_MIN_LENGTH, HTTP_CONFLICT_ERROR} = require('../utils/constants');
@@ -48,11 +49,12 @@ exports.signUpValidator = [
     .trim()
     .isLength({min: PASSWORD_MIN_LENGTH})
     .custom((value, {req}) => {
-      if (value !== req['confirm-password']) {
+      if (value !== req.body.password) {
         const error = new Error('The confirm password must be the same as the password!');
         error.statusCode = HTTP_CONFLICT_ERROR;
         throw error;
       }
+      return true;
     })
 ]
 
@@ -61,11 +63,21 @@ exports.loginValidator =
     body('username')
       .not()
       .isEmpty()
-      .trim(),
+      .trim()
+      .custom((value, {req}) => {
+        return User.findOne({username: value})
+          .then(user => {
+            if (!user) {
+              const error = new Error('The user with this username does not exist');
+              error.statusCode = HTTP_NOT_AUTHENTICATED;
+              throw error;
+            }
+          });
+      }),
 
     body('password')
       .not()
       .isEmpty()
       .trim()
-      .isLength({min: PASSWORD_MIN_LENGTH}),
+      .isLength({min: PASSWORD_MIN_LENGTH})
   ]

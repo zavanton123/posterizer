@@ -7,6 +7,7 @@ const {APP_SECRET} = process.env;
 const {
   HTTP_CREATED,
   HTTP_NOT_AUTHENTICATED,
+  HTTP_OK,
   JWT_TOKEN_DURATION,
   HTTP_UNPROCESSABLE_ENTITY
 } = require('../utils/constants');
@@ -51,24 +52,19 @@ exports.login = async (req, res, next) => {
       throw error;
     }
     // check user and password
-    const user = await checkUserExists(req.body.username);
-    await checkPassword(req.body.password, user)
-    // create and return token
-    const token = createToken(user);
-    return res.json({id: user._id, token: token});
+    const user = await User.findOne({username: req.body.username});
+    await checkPassword(req.body.password, user);
+
+    if (user) {
+      // create and return token
+      const token = createToken(user);
+      return res.status(HTTP_OK).json({id: user._id, token: token});
+    } else {
+      return res.status(HTTP_NOT_AUTHENTICATED).json({});
+    }
   } catch (err) {
     processError(err, next);
   }
-}
-
-async function checkUserExists(username) {
-  const user = await User.findOne({username: username});
-  if (!user) {
-    const error = new Error('The user with this username does not exist');
-    error.statusCode = HTTP_NOT_AUTHENTICATED;
-    throw error;
-  }
-  return user;
 }
 
 async function checkPassword(password, user) {
