@@ -20,6 +20,7 @@ exports.signup = async (req, res, next) => {
     if (!errors.isEmpty()) {
       const error = new Error('Validation failed');
       error.statusCode = HTTP_UNPROCESSABLE_ENTITY;
+      error.data = errors.array();
       throw error;
     }
 
@@ -28,8 +29,6 @@ exports.signup = async (req, res, next) => {
     const password = req.body.password;
     const confirmPassword = req.body['confirm-password'];
 
-    await ensureUniqueUsername(username, next);
-    await ensureUniqueEmail(email, next, res);
     ensureEqualPasswords(password, confirmPassword);
 
     const hashedPassword = await bcrypt.hash(password, 12);
@@ -44,24 +43,6 @@ exports.signup = async (req, res, next) => {
     });
   } catch (err) {
     processError(err, next);
-  }
-}
-
-async function ensureUniqueUsername(username) {
-  const user = await User.find({username: username});
-  if (user.length > 0) {
-    const error = new Error(`A user with the username ${username} already exists!`);
-    error.statusCode = HTTP_CONFLICT_ERROR;
-    throw error;
-  }
-}
-
-async function ensureUniqueEmail(email) {
-  const user = await User.findOne({email: email});
-  if (user) {
-    const error = new Error(`A user with the email ${email} already exists!`);
-    error.statusCode = HTTP_CONFLICT_ERROR;
-    throw error;
   }
 }
 
@@ -80,6 +61,7 @@ exports.login = async (req, res, next) => {
     if (!errors.isEmpty()) {
       const error = new Error('Validation failed');
       error.statusCode = HTTP_UNPROCESSABLE_ENTITY;
+      error.data = errors.array();
       throw error;
     }
     // check user and password

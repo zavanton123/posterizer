@@ -7,12 +7,34 @@ const apiController = require('../controllers/post-controller');
 const commentController = require('../controllers/comment-controller');
 const taxonomyController = require('../controllers/taxonomy-controller');
 const {PASSWORD_MIN_LENGTH} = require('../utils/constants');
+const {User} = require('../models/models');
 
 // Auth endpoints
 router.post('/signup',
   [
-    body('username').trim().not().isEmpty(),
-    body('email').trim().isEmail().withMessage('Enter valid email!'),
+    body('username')
+      .trim()
+      .custom((value, {req}) => {
+          return User.findOne({username: value})
+            .then(user => {
+                if (user) {
+                  return Promise.reject(`A user with the username ${value} already exists!`)
+                }
+              }
+            );
+        }
+      ),
+    body('email').trim().isEmail().withMessage('Enter valid email!')
+      .custom((value, {req}) => {
+          return User.findOne({email: value})
+            .then(user => {
+                if (user) {
+                  return Promise.reject(`A user with the email ${value} already exists!`)
+                }
+              }
+            );
+        }
+      ),
     body('password').trim().isLength({min: PASSWORD_MIN_LENGTH}),
     body('confirm-password').trim().isLength({min: PASSWORD_MIN_LENGTH}),
   ],
