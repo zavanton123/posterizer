@@ -1,3 +1,4 @@
+const {validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const {processError} = require('../utils/errors');
@@ -7,7 +8,8 @@ const {
   HTTP_CREATED,
   HTTP_CONFLICT_ERROR,
   HTTP_NOT_AUTHENTICATED,
-  JWT_TOKEN_DURATION
+  JWT_TOKEN_DURATION,
+  HTTP_UNPROCESSABLE_ENTITY
 } = require('../utils/constants');
 
 
@@ -65,9 +67,17 @@ function ensureEqualPasswords(password, confirmPassword) {
 
 exports.login = async (req, res, next) => {
   try {
+    // validate the request
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      const error = new Error('Validation failed');
+      error.statusCode = HTTP_UNPROCESSABLE_ENTITY;;
+      throw error;
+    }
+    // check user and password
     const user = await checkUserExists(req.body.username);
     await checkPassword(req.body.password, user)
-
+    // create and return token
     const token = createToken(user);
     return res.json({id: user._id, token: token});
   } catch (err) {

@@ -1,3 +1,4 @@
+const {body} = require('express-validator');
 const express = require('express');
 const router = express.Router();
 const {isAuthenticated} = require('../auth/auth');
@@ -7,8 +8,12 @@ const commentController = require('../controllers/comment-controller');
 const taxonomyController = require('../controllers/taxonomy-controller');
 
 // Auth endpoints
-router.post('/signup', authController.signup);
-router.post('/login', authController.login);
+router.post('/signup',
+  authController.signup);
+router.post('/login', [
+    body('username').trim().not().isEmpty(),
+    body('password').trim().isLength({min: 10})],
+  authController.login);
 
 // Post endpoints
 router.get('/posts/:postId', apiController.fetchPostById);
