@@ -11,7 +11,6 @@ Create a file /api/.env
 
 
 ### TODO
-- add validation
 - add tests
 - use typescript
 - use repository pattern
