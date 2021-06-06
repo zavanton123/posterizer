@@ -6,7 +6,6 @@ const {User} = require('../models/models');
 const {APP_SECRET} = process.env;
 const {
   HTTP_CREATED,
-  HTTP_CONFLICT_ERROR,
   HTTP_NOT_AUTHENTICATED,
   JWT_TOKEN_DURATION,
   HTTP_UNPROCESSABLE_ENTITY
@@ -23,19 +22,14 @@ exports.signup = async (req, res, next) => {
       error.data = errors.array();
       throw error;
     }
-
+    // hash password and persist user
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password;
-    const confirmPassword = req.body['confirm-password'];
-
-    ensureEqualPasswords(password, confirmPassword);
-
     const hashedPassword = await bcrypt.hash(password, 12);
     const user = await User.create({username: username, email: email, password: hashedPassword});
 
     return res.status(HTTP_CREATED).json({
-      message: 'A new user saved successfully',
       user: {
         username: user.username,
         email: user.email
@@ -43,14 +37,6 @@ exports.signup = async (req, res, next) => {
     });
   } catch (err) {
     processError(err, next);
-  }
-}
-
-function ensureEqualPasswords(password, confirmPassword) {
-  if (password !== confirmPassword) {
-    const error = new Error('The confirm password must be the same as the password!');
-    error.statusCode = HTTP_CONFLICT_ERROR;
-    throw error;
   }
 }
 
