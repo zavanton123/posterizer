@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "target": "es6",
+    "baseUrl": "./src",
     "module": "commonjs",
+    "moduleResolution": "node",
     "rootDir": "./src",
     "outDir": "./build",
     "esModuleInterop": true,

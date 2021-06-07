@@ -1,8 +1,10 @@
-FROM node:alpine
+FROM node:14 as base
 
-WORKDIR /usr/src/app
-COPY ./package*.json ./
-RUN npm install
-COPY ./ ./
+WORKDIR /home/node/app
+COPY package*.json ./
+RUN npm i
+COPY . .
 
-CMD ["npm", "run", "nodemon"]
+FROM base as production
+ENV NODE_PATH=./build
+RUN npm run build

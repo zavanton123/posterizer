@@ -1,4 +1,5 @@
-version: '3'
+version: '3.7'
+
 services:
   database:
     image: mongo
@@ -8,6 +9,7 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
+      target: base
     image: posterizer-api
     container_name: posterizer-api
     env_file:
@@ -17,10 +19,12 @@ services:
       - DBNAME=$DBNAME
     ports:
       - "3000:3000"
+    expose:
+      - "3000"
     volumes:
-      - ./api:/usr/src/app
-      - ./api/node_modules:/usr/src/app/node_modules
-    command: ./wait-for.sh database:27017 -- /usr/src/app/node_modules/.bin/nodemon app.js
+      - ./api/src:/home/node/app/src
+      - ./api/nodemon.json:/home/node/app/nodemon.json
+    command: npm run dev
 volumes:
   node_modules:
   dbdata:

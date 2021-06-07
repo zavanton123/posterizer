@@ -1,6 +1,7 @@
-const express = require('express');
+import express, {NextFunction, Request, Response} from "express";
+import bodyParser from "body-parser";
+
 const app = express();
-const bodyParser = require('body-parser');
 const db = require('./database/connection');
 const apiRouter = require('./routes/api-routes');
 const {APP_PORT, HTTP_SERVER_ERROR} = require('./utils/constants');
@@ -9,7 +10,7 @@ const {APP_PORT, HTTP_SERVER_ERROR} = require('./utils/constants');
 app.use(bodyParser.json());
 
 // CORS headers
-app.use((req, res, next) => {
+app.use((req: Request, res: Response, next: NextFunction) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader(
     'Access-Control-Allow-Methods',
@@ -23,7 +24,7 @@ app.use((req, res, next) => {
 app.use('/api', apiRouter);
 
 // Add error processing
-app.use((error, req, res, next) => {
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   const status = error.statusCode || HTTP_SERVER_ERROR;
   const message = error.message;
   const data = error.data;
