@@ -1,13 +1,16 @@
-const jwt = require('jsonwebtoken');
-const {HTTP_SERVER_ERROR, HTTP_NOT_AUTHENTICATED, AUTHORIZATION_HEADER} = require("../utils/constants");
+import {NextFunction, Request, Response} from "express";
+import jwt from "jsonwebtoken";
+import {AUTHORIZATION_HEADER, HTTP_NOT_AUTHENTICATED, HTTP_SERVER_ERROR} from "../utils/constants";
+import {HttpException} from "../utils/errors";
+
 const {APP_SECRET} = process.env;
 
-exports.isAuthenticated = (req, res, next) => {
+
+
+export function isAuthenticated(req: Request, res: Response, next: NextFunction) {
   const authHeader = req.get(AUTHORIZATION_HEADER);
   if (!authHeader) {
-    const error = new Error('Not authenticated');
-    error.statusCode = HTTP_NOT_AUTHENTICATED;
-    throw error;
+    throw new HttpException('Not authenticated', HTTP_NOT_AUTHENTICATED);
   }
 
   // Authorization: Bearer some-token-here
@@ -21,9 +24,7 @@ exports.isAuthenticated = (req, res, next) => {
   }
 
   if (!decodedToken) {
-    const error = new Error('Not authenticated');
-    error.statusCode = HTTP_NOT_AUTHENTICATED;
-    throw error;
+    throw new HttpException('Not authenticated', HTTP_NOT_AUTHENTICATED);
   }
   req.userId = decodedToken.userId;
   req.username = decodedToken.username;

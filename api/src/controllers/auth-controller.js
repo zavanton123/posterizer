@@ -1,3 +1,5 @@
+import {HttpException} from "../utils/errors";
+
 const {validationResult} = require('express-validator');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -18,10 +20,8 @@ exports.signup = async (req, res, next) => {
     // validate the request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const error = new Error('Validation failed');
-      error.statusCode = HTTP_UNPROCESSABLE_ENTITY;
-      error.data = errors.array();
-      throw error;
+      // error.data = errors.array();
+      throw new HttpException('Validation failed', HTTP_UNPROCESSABLE_ENTITY);
     }
     // hash password and persist user
     const username = req.body.username;
@@ -46,10 +46,8 @@ exports.login = async (req, res, next) => {
     // validate the request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      const error = new Error('Validation failed');
-      error.statusCode = HTTP_UNPROCESSABLE_ENTITY;
-      error.data = errors.array();
-      throw error;
+      // error.data = errors.array();
+      throw new HttpException('Validation failed', HTTP_UNPROCESSABLE_ENTITY);
     }
     // check user and password
     const user = await User.findOne({username: req.body.username});

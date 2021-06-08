@@ -1,12 +1,8 @@
+import {HttpException, processError} from "../utils/errors";
+import {HTTP_CREATED, HTTP_FORBIDDEN, HTTP_NO_CONTENT, HTTP_NOT_FOUND} from "../utils/constants";
+
 const models = require('../models/models');
-const {processError} = require("../utils/errors");
 const {Post} = models;
-const {
-  HTTP_CREATED,
-  HTTP_FORBIDDEN,
-  HTTP_NOT_FOUND,
-  HTTP_NO_CONTENT
-} = require('../utils/constants');
 
 exports.createComment = async (req, res, next) => {
   try {
@@ -54,9 +50,10 @@ const checkCommentAuthor = async (req) => {
   for (const comment of post.comments) {
     if (comment._id.toString() === req.params.commentId) {
       if (req.userId !== comment.author._id.toString()) {
-        const error = new Error('Only comment authors can update their comments');
-        error.statusCode = HTTP_FORBIDDEN
-        throw error;
+        throw new HttpException(
+          'Only comment authors can update their comments',
+          HTTP_FORBIDDEN
+        );
       }
     }
   }

@@ -1,3 +1,5 @@
+import {HttpException} from "../utils/errors";
+
 const _ = require('lodash');
 const {Post, User, Tag, Category} = require('../models/models');
 const {processError} = require("../utils/errors");
@@ -110,16 +112,15 @@ const checkPost = async (req) => {
   const targetPost = await Post.findById(req.params.postId);
   // check that the post exists
   if (!targetPost) {
-    const error = new Error('Post not found');
-    error.statusCode = HTTP_NOT_FOUND;
-    throw error;
+    throw new HttpException('Post not found', HTTP_NOT_FOUND)
   }
 
   // check that the authenticated user is the author
   if (req.userId !== targetPost.author._id.toString()) {
-    const error = new Error('Only authors can edit or delete their posts');
-    error.statusCode = HTTP_FORBIDDEN;
-    throw error;
+    throw new HttpException(
+      'Only authors can edit or delete their posts',
+      HTTP_FORBIDDEN
+    );
   }
 }
 
