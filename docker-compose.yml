@@ -17,6 +17,7 @@ services:
     environment:
       - DBPORT=$DBPORT
       - DBNAME=$DBNAME
+      - DBNAME_TEST=$DBNAME_TEST
     ports:
       - "3000:3000"
     expose:

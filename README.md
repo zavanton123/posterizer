@@ -8,6 +8,8 @@ Create a file /api/.env
 >
 > DBNAME=posterizer
 >
+> DBNAME_TEST=posterizer_test
+>
 
 
 ### TODO
