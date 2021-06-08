@@ -1,10 +1,15 @@
 import express, {NextFunction, Request, Response} from "express";
 import bodyParser from "body-parser";
 
+
+import {db} from "./database/connection";
+
+import {APP_PORT, HTTP_SERVER_ERROR} from "./utils/constants";
+
 const app = express();
-const db = require('./database/connection');
+
+
 const apiRouter = require('./routes/api-routes');
-const {APP_PORT, HTTP_SERVER_ERROR} = require('./utils/constants');
 
 // Setup body-parser
 app.use(bodyParser.json());

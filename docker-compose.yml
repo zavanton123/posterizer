@@ -26,7 +26,6 @@ services:
       - ./api/nodemon.json:/home/node/app/nodemon.json
     command: npm run dev
 volumes:
-  node_modules:
   dbdata:
 networks:
   default:
