@@ -1,9 +1,9 @@
-const {body} = require('express-validator');
+import {body} from "express-validator";
 
-exports.commentValidator = [
+export const commentValidator = [
   body('content')
     .not()
     .isEmpty()
     .trim()
     .isLength({min: 2})
-]
+];

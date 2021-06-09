@@ -3,11 +3,21 @@ import jwt from "jsonwebtoken";
 import {AUTHORIZATION_HEADER, HTTP_NOT_AUTHENTICATED, HTTP_SERVER_ERROR} from "../utils/constants";
 import {HttpException} from "../utils/errors";
 
-const {APP_SECRET} = process.env;
 
+export interface AuthRequest extends Request {
+  userId: string;
+  username: string;
+  email: string;
+}
 
+interface AuthToken {
+  userId: string;
+  username: string;
+  email: string;
+}
 
 export function isAuthenticated(req: Request, res: Response, next: NextFunction) {
+  const authRequest = req as AuthRequest
   const authHeader = req.get(AUTHORIZATION_HEADER);
   if (!authHeader) {
     throw new HttpException('Not authenticated', HTTP_NOT_AUTHENTICATED);
@@ -15,19 +25,20 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
 
   // Authorization: Bearer some-token-here
   const token = authHeader.split(' ')[1];
-  let decodedToken;
+  let authToken;
   try {
-    decodedToken = jwt.verify(token, APP_SECRET);
+    const secret = process.env.APP_SECRET as string;
+    authToken = jwt.verify(token, secret) as AuthToken;
   } catch (err) {
     err.statusCode = HTTP_SERVER_ERROR;
     throw err;
   }
 
-  if (!decodedToken) {
+  if (!authToken) {
     throw new HttpException('Not authenticated', HTTP_NOT_AUTHENTICATED);
   }
-  req.userId = decodedToken.userId;
-  req.username = decodedToken.username;
-  req.email = decodedToken.email;
+  authRequest.userId = authToken.userId;
+  authRequest.username = authToken.username;
+  authRequest.email = authToken.email;
   next();
 }

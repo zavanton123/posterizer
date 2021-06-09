@@ -1,19 +1,15 @@
-const express = require('express');
+import express from "express";
+import {createComment, deleteComment} from "../controllers/comment-controller";
+import {fetchCategories, fetchTags} from "../controllers/taxonomy-controller";
+import {login, signup} from "../controllers/auth-controller";
+import {createPost, deletePostById, fetchPostById, fetchPosts, updatePostById} from "../controllers/post-controller";
+import {postValidator} from "../validators/post-validators";
+import {loginValidator, signUpValidator} from "../validators/auth-validators";
+import {commentValidator} from "../validators/comment-validators";
+import {isAuthenticated} from "../auth/auth-middleware";
+
 const router = express.Router();
-const {isAuthenticated} = require('../auth/auth');
-const {createComment, deleteComment} = require("../controllers/comment-controller");
-const {fetchCategories, fetchTags} = require("../controllers/taxonomy-controller");
-const {signup, login} = require("../controllers/auth-controller");
-const {postValidator} = require("../validators/post-validators");
-const {loginValidator, signUpValidator} = require("../validators/auth-validators");
-const {commentValidator} = require('../validators/comment-validators');
-const {
-  fetchPostById,
-  fetchPosts,
-  createPost,
-  updatePostById,
-  deletePostById
-} = require("../controllers/post-controller");
+
 
 // Auth endpoints
 router.post('/signup', signUpValidator, signup);
@@ -34,4 +30,4 @@ router.get('/tags', fetchTags);
 router.post('/posts/:postId/comments', isAuthenticated, commentValidator, createComment);
 router.delete('/posts/:postId/comments/:commentId', isAuthenticated, deleteComment);
 
-module.exports = router;
+export default router;

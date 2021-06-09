@@ -1,11 +1,9 @@
 import {HttpException} from "../utils/errors";
 import {HTTP_CONFLICT_ERROR, HTTP_NOT_AUTHENTICATED, PASSWORD_MIN_LENGTH} from "../utils/constants";
 import {body} from "express-validator";
+import {User} from "../models/models";
 
-const {User} = require('../models/models');
-
-
-exports.signUpValidator = [
+export const signUpValidator = [
   body('username')
     .not()
     .isEmpty()
@@ -59,29 +57,28 @@ exports.signUpValidator = [
       }
       return true;
     })
-]
+];
 
-exports.loginValidator =
-  [
-    body('username')
-      .not()
-      .isEmpty()
-      .trim()
-      .custom((value, {req}) => {
-        return User.findOne({username: value})
-          .then(user => {
-            if (!user) {
-              throw new HttpException(
-                'The user with this username does not exist',
-                HTTP_NOT_AUTHENTICATED
-              );
-            }
-          });
-      }),
+export const loginValidator = [
+  body('username')
+    .not()
+    .isEmpty()
+    .trim()
+    .custom((value, {req}) => {
+      return User.findOne({username: value})
+        .then(user => {
+          if (!user) {
+            throw new HttpException(
+              'The user with this username does not exist',
+              HTTP_NOT_AUTHENTICATED
+            );
+          }
+        });
+    }),
 
-    body('password')
-      .not()
-      .isEmpty()
-      .trim()
-      .isLength({min: PASSWORD_MIN_LENGTH})
-  ]
+  body('password')
+    .not()
+    .isEmpty()
+    .trim()
+    .isLength({min: PASSWORD_MIN_LENGTH})
+];

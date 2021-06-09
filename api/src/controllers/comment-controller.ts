@@ -1,18 +1,20 @@
 import {HttpException, processError} from "../utils/errors";
 import {HTTP_CREATED, HTTP_FORBIDDEN, HTTP_NO_CONTENT, HTTP_NOT_FOUND} from "../utils/constants";
+import {NextFunction, Request, Response} from "express";
+import {AuthRequest} from "../auth/auth-middleware";
+import {IPost, Post} from "../models/models";
 
-const models = require('../models/models');
-const {Post} = models;
-
-exports.createComment = async (req, res, next) => {
+export async function createComment(req: Request, res: Response, next: NextFunction) {
   try {
+    const authRequest = req as AuthRequest;
+    const postId = req.params.postId;
     const updatedPost = await Post.findByIdAndUpdate(
-      req.params.postId,
+      postId,
       {
         $push:
           {
             comments: {
-              author: req.userId,
+              author: authRequest.userId,
               content: req.body.content
             }
           }
@@ -29,9 +31,10 @@ exports.createComment = async (req, res, next) => {
   }
 }
 
-exports.deleteComment = async (req, res, next) => {
+export async function deleteComment(req: Request, res: Response, next: NextFunction) {
   try {
-    await checkCommentAuthor(req);
+    const authRequest = req as AuthRequest;
+    await checkCommentAuthor(authRequest);
     const postId = req.params.postId;
     const commentId = req.params.commentId;
     const result = await Post.findByIdAndUpdate(postId, {$pull: {comments: {_id: commentId}}});
@@ -45,15 +48,17 @@ exports.deleteComment = async (req, res, next) => {
   }
 }
 
-const checkCommentAuthor = async (req) => {
-  const post = await Post.findById(req.params.postId);
-  for (const comment of post.comments) {
-    if (comment._id.toString() === req.params.commentId) {
-      if (req.userId !== comment.author._id.toString()) {
-        throw new HttpException(
-          'Only comment authors can update their comments',
-          HTTP_FORBIDDEN
-        );
+const checkCommentAuthor = async (req: AuthRequest) => {
+  const post: IPost | null = await Post.findById(req.params.postId);
+  if (post) {
+    for (const comment of post.comments) {
+      if (comment._id.toString() === req.params.commentId) {
+        if (req.userId !== comment.author._id.toString()) {
+          throw new HttpException(
+            'Only comment authors can update their comments',
+            HTTP_FORBIDDEN
+          );
+        }
       }
     }
   }

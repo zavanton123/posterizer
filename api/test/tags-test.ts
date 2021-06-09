@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+import mongoose from "mongoose";
+import assert from "assert";
+import {Tag} from "../src/models/models";
 
-const assert = require('assert');
-const {Tag} = require('../src/models/models');
+mongoose.Promise = global.Promise;
 
 describe('tag test', () => {
   it('get all tags 1', done => {

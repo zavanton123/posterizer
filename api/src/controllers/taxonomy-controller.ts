@@ -1,10 +1,12 @@
+import {processError} from "../utils/errors";
+import {HTTP_OK} from "../utils/constants";
+import {NextFunction, Request, Response} from "express";
+
 const models = require('../models/models');
 const {Tag, Category} = models;
-const {processError} = require("../utils/errors");
-const {HTTP_OK} = require('../utils/constants');
 
 
-exports.fetchCategories = async (req, res, next) => {
+export async function fetchCategories(req: Request, res: Response, next: NextFunction) {
   try {
     const categories = await Category.find({}, {'__v': 0});
     if (categories.length > 0) {
@@ -21,7 +23,7 @@ exports.fetchCategories = async (req, res, next) => {
   }
 }
 
-exports.fetchTags = async (req, res, next) => {
+export async function fetchTags(req: Request, res: Response, next: NextFunction) {
   try {
     const tags = await Tag.find({}, {'__v': 0});
     if (tags.length > 0) {

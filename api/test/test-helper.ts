@@ -1,5 +1,4 @@
-const mongoose = require('mongoose');
-const {DBPORT, DBNAME_TEST} = process.env;
+import mongoose from "mongoose";
 
 before(done => {
   console.log(`zavanton - before is called`);
@@ -10,13 +9,11 @@ before(done => {
     useUnifiedTopology: true
   };
   mongoose.connect(url, options);
-  mongoose.connection
+
+  mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'))
     .once('open', () => {
       console.log(`zavanton - connected to db!!!`);
       done();
-    })
-    .on('error', error => {
-      console.warn('Error', error);
     });
 });
 

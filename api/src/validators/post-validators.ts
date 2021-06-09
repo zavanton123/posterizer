@@ -1,6 +1,6 @@
-const {body} = require('express-validator');
+import {body} from "express-validator";
 
-exports.postValidator = [
+export const postValidator = [
   body('title')
     .not()
     .isEmpty()
@@ -18,4 +18,4 @@ exports.postValidator = [
     .isEmpty()
     .trim()
     .isLength({min: 2}),
-]
+];

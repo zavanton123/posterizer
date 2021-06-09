@@ -1,21 +1,21 @@
-import {HttpException} from "../utils/errors";
-
-const {validationResult} = require('express-validator');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const {processError} = require('../utils/errors');
-const {User} = require('../models/models');
-const {APP_SECRET} = process.env;
-const {
+import {HttpException, processError} from "../utils/errors";
+import {validationResult} from "express-validator";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import {NextFunction, Request, Response} from "express";
+import {
   HTTP_CREATED,
   HTTP_NOT_AUTHENTICATED,
   HTTP_OK,
-  JWT_TOKEN_DURATION,
-  HTTP_UNPROCESSABLE_ENTITY
-} = require('../utils/constants');
+  HTTP_UNPROCESSABLE_ENTITY,
+  JWT_TOKEN_DURATION
+} from "../utils/constants";
+import {IUser} from "../models/models";
+
+const {User} = require('../models/models');
 
 
-exports.signup = async (req, res, next) => {
+export async function signup(req: Request, res: Response, next: NextFunction) {
   try {
     // validate the request
     const errors = validationResult(req);
@@ -41,7 +41,7 @@ exports.signup = async (req, res, next) => {
   }
 }
 
-exports.login = async (req, res, next) => {
+export async function login(req: Request, res: Response, next: NextFunction) {
   try {
     // validate the request
     const errors = validationResult(req);
@@ -50,7 +50,7 @@ exports.login = async (req, res, next) => {
       throw new HttpException('Validation failed', HTTP_UNPROCESSABLE_ENTITY);
     }
     // check user and password
-    const user = await User.findOne({username: req.body.username});
+    const user: IUser = await User.findOne({username: req.body.username});
     await checkPassword(req.body.password, user);
 
     if (user) {
@@ -65,19 +65,18 @@ exports.login = async (req, res, next) => {
   }
 }
 
-async function checkPassword(password, user) {
+async function checkPassword(password: string, user: IUser) {
   const isPasswordValid = await bcrypt.compare(password, user.password);
   if (!isPasswordValid) {
-    const error = new Error('Wrong password!');
-    error.statusCode = HTTP_NOT_AUTHENTICATED;
-    throw error;
+    throw new HttpException('Wrong password!', HTTP_NOT_AUTHENTICATED);
   }
 }
 
-function createToken(user) {
+function createToken(user: IUser) {
+  const secret = process.env.APP_SECRET as string;
   return jwt.sign(
     {userId: user._id, username: user.username, email: user.email},
-    APP_SECRET,
+    secret,
     {expiresIn: JWT_TOKEN_DURATION}
   );
 }
