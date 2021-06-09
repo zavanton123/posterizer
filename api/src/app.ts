@@ -6,6 +6,11 @@ import apiRouter from "./routes/api-routes";
 
 const app = express();
 
+// app.use('/', (req: Request, res: Response, next: NextFunction) => {
+//   return res.send("Hello world");
+// });
+// app.listen(3000);
+
 // Setup body-parser
 app.use(bodyParser.json());
 

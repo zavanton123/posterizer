@@ -3,5 +3,7 @@ version: '3.7'
 services:
   api:
     build:
+      context: ./api
+      dockerfile: Dockerfile
       target: production
     command: node build/app.js
