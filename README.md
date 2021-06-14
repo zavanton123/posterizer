@@ -11,8 +11,11 @@ Create a file /api/.env
 
 
 ### TODO
+- add Dockerfile (dev and prod) to web
+- add web to docker-compose (dev and prod)
+- run with kubernetes (locally)
+- deploy with kubernetes to Google Cloud
 - add tests
-- use typescript
 - use repository pattern
 - add pagination
 - email confirmation 
