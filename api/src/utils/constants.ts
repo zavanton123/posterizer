@@ -1,5 +1,5 @@
 // Default application port
-export const APP_PORT = 3000;
+export const APP_PORT = 5000;
 
 // JWT Token Duration
 export const JWT_TOKEN_DURATION = '1d';
