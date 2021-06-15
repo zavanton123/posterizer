@@ -43,5 +43,6 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('zavanton - connected to MongoDB');
+  console.log("hello world");
   app.listen(APP_PORT);
 });
