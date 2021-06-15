@@ -1,0 +1,18 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t zavanton/posterizer-web-test -f ./web/Dockerfile.dev ./web
+
+script:
+  - docker run -e CI=true zavanton/posterizer-web-test npm run test
+
+after_success:
+  - docker build -t zavanton/posterizer-web ./web
+  - docker build -t zavanton/posterizer-api ./api
+  - docker build -t zavanton/posterizer-nginx ./nginx
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push zavanton/posterizer-web
+  - docker push zavanton/posterizer-api
+  - docker push zavanton/posterizer-nginx
