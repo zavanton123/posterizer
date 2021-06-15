@@ -1,7 +1,22 @@
 version: '3.7'
 
 services:
+  database:
+    image: mongo
+    volumes:
+      - dbdata:/data/db
+  nginx:
+    depends_on:
+      - api
+      - web
+    restart: always
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3050:80"
   web:
+    stdin_open: true
     build:
       context: ./web
       dockerfile: Dockerfile
@@ -10,10 +25,6 @@ services:
 #    volumes:
 #      - /app/node_modules
 #      - ./web/src:/app
-  database:
-    image: mongo
-    volumes:
-      - dbdata:/data/db
   api:
     build:
       context: ./api
