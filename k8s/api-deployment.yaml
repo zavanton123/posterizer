@@ -27,5 +27,5 @@ spec:
             - name: APP_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: appSecret
+                  name: appsecret
                   key: APPSECRET
