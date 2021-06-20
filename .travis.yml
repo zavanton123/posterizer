@@ -1,18 +1,41 @@
 sudo: required
 services:
   - docker
-
+env:
+  global:
+    # SHA is the git sha tag (i.e. indicates the specific snapshop of your source code)
+    - SHA=$(git rev-parse HEAD)
+    # this disables any cloud sdk prompts
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 before_install:
-  - docker build -t zavanton/posterizer-web-test -f ./web/Dockerfile.dev.dev ./web
+  # decrypt the service-account.json.enc file into service-account.json file (it contains Google Cloud credentials)
+  - openssl aes-256-cbc -K $encrypted_9f3b5599b056_key -iv $encrypted_9f3b5599b056_iv -in service-account.json.enc -out service-account.json -d
+  # install Google Cloud CLI
+  - curl https://sdk.cloud.google.com | bash > /dev/null;
+  - source $HOME/google-cloud-sdk/path.bash.inc
+  # Install/update kubectl
+  - gcloud components update kubectl
+  # Login to Google Cloud
+  - gcloud auth activate-service-account --key-file service-account.json
+  # Indicate the k8s project name, zone, cluster
+  # (You can find out the project id in Google Cloud Console top nav bar drop-down menu)
+  - gcloud config set project posterizer
+  - gcloud config set compute/zone europe-central2-a
+  # ('posterizer-cluster' is some name of your cluster, you can see it in clusters list in Google Cloud Console)
+  - gcloud container clusters get-credentials posterizer-cluster
+  # Login to Docker Hub (DOCKER_PASSWORD and DOCKER_ID must be saved as environment variables in travis.com)
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # build a docker image for running tests
+  - docker build -t zavanton/posterizer-web-test -f ./web/Dockerfile.dev ./web
 
 script:
+  # run the tests
   - docker run -e CI=true zavanton/posterizer-web-test npm run test
 
-after_success:
-  - docker build -t zavanton/posterizer-web ./web
-  - docker build -t zavanton/posterizer-api ./api
-  - docker build -t zavanton/posterizer-nginx ./nginx
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push zavanton/posterizer-web
-  - docker push zavanton/posterizer-api
-  - docker push zavanton/posterizer-nginx
+deploy:
+  # Setup manual deployment via deploy.sh script
+  provider: script
+  script: bash ./deploy.sh
+  # travis will do it only when master branch is pushed
+  on:
+    branch: master
