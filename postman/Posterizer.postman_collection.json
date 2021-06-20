@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "localhost:3000/api",
+			"name": "{{host}}:{{port}}/api/",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -17,20 +17,21 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:3000/api",
+					"raw": "{{host}}:{{port}}/api/",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
-						"api"
+						"api",
+						""
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7",
+			"name": "{{host}}:{{port}}/api/posts/60b9d99bc872a7001b31e0a7",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -41,22 +42,22 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7",
+					"raw": "{{host}}:{{port}}/api/posts/60c09af2ea6c668031f1655a",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"posts",
-						"60b9d99bc872a7001b31e0a7"
+						"60c09af2ea6c668031f1655a"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "localhost:3000/api/posts",
+			"name": "{{host}}:{{port}}/api/posts",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -76,11 +77,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/posts",
+					"raw": "{{host}}:{{port}}/api/posts",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"posts"
@@ -90,7 +91,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7",
+			"name": "{{host}}:{{port}}/api/posts/60b9d99bc872a7001b31e0a7",
 			"request": {
 				"method": "PATCH",
 				"header": [
@@ -110,11 +111,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7",
+					"raw": "{{host}}:{{port}}/api/posts/60b9d99bc872a7001b31e0a7",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"posts",
@@ -125,7 +126,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:3000/api/posts/60b9da5375e44c001c6470a7",
+			"name": "{{host}}:{{port}}/api/posts/60b9da5375e44c001c6470a7",
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -136,11 +137,11 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:3000/api/posts/60b9da5375e44c001c6470a7",
+					"raw": "{{host}}:{{port}}/api/posts/60b9da5375e44c001c6470a7",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"posts",
@@ -151,7 +152,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:3000/api/categories",
+			"name": "{{host}}:{{port}}/api/categories",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -162,11 +163,11 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:3000/api/categories",
+					"raw": "{{host}}:{{port}}/api/categories",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"categories"
@@ -176,7 +177,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:3000/api/tags",
+			"name": "{{host}}:{{port}}/api/tags",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -187,11 +188,11 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:3000/api/tags",
+					"raw": "{{host}}:{{port}}/api/tags",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"tags"
@@ -201,7 +202,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7/comments",
+			"name": "{{host}}:{{port}}/api/posts/60b9d99bc872a7001b31e0a7/comments",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -221,15 +222,15 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7/comments",
+					"raw": "{{host}}:{{port}}/api/posts/60bb6fcfeed9d3001b2e2be5/comments",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"posts",
-						"60b9d99bc872a7001b31e0a7",
+						"60bb6fcfeed9d3001b2e2be5",
 						"comments"
 					]
 				}
@@ -237,7 +238,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7/comments/60b9f44aa3f23e001b30d4e9",
+			"name": "{{host}}:{{port}}/api/posts/60b9d99bc872a7001b31e0a7/comments/60b9f44aa3f23e001b30d4e9",
 			"request": {
 				"method": "DELETE",
 				"header": [
@@ -248,30 +249,30 @@
 					}
 				],
 				"url": {
-					"raw": "localhost:3000/api/posts/60b9d99bc872a7001b31e0a7/comments/60b9f44aa3f23e001b30d4e9",
+					"raw": "{{host}}:{{port}}/api/posts/60bb6fcfeed9d3001b2e2be5/comments/60bb79608faf250029ee6e96",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"posts",
-						"60b9d99bc872a7001b31e0a7",
+						"60bb6fcfeed9d3001b2e2be5",
 						"comments",
-						"60b9f44aa3f23e001b30d4e9"
+						"60bb79608faf250029ee6e96"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "localhost:3000/api/signup",
+			"name": "{{host}}:{{port}}/api/signup",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"username\": \"zavanton3\",\n    \"email\": \"zavanton3@yandex.ru\",\n    \"password\": \"some-password\",\n    \"confirm-password\": \"some-password\"\n}",
+					"raw": "{\n    \"username\": \"zavanton\",\n    \"email\": \"zavanton@yandex.ru\",\n    \"password\": \"some-password\",\n    \"confirm-password\": \"some-password\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -279,11 +280,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/signup",
+					"raw": "{{host}}:{{port}}/api/signup",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"signup"
@@ -293,7 +294,7 @@
 			"response": []
 		},
 		{
-			"name": "localhost:3000/api/login",
+			"name": "{{host}}:{{port}}/api/login",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -307,11 +308,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/login",
+					"raw": "{{host}}:{{port}}/api/login",
 					"host": [
-						"localhost"
+						"{{host}}"
 					],
-					"port": "3000",
+					"port": "{{port}}",
 					"path": [
 						"api",
 						"login"
