@@ -4,8 +4,6 @@ WORKDIR /usr/src/app
 COPY ./package*.json ./
 RUN npm install
 COPY ./ ./
-ENV NODE_PATH=./build
-RUN npm run build
 EXPOSE 5000
 
-CMD ["npm", "run", "prod"]
+CMD ["npm", "run", "dev"]

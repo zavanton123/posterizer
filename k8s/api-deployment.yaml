@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: api-deployment
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       component: api
@@ -20,16 +20,12 @@ spec:
           env:
             - name: DBNAME
               value: 'posterizer'
-            - name: PGUSER
-              value: root
             - name: PGHOST
               value: mongo-cluster-ip-service
             - name: DBPORT
               value: '27017'
-            - name: PGDATABASE
-              value: mongo
-            - name: MONGOPASSWORD
+            - name: APP_SECRET
               valueFrom:
                 secretKeyRef:
-                  name: mongopassword
-                  key: MONGOPASSWORD
+                  name: appSecret
+                  key: APPSECRET

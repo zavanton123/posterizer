@@ -2,11 +2,10 @@
   "name": "api",
   "version": "1.0.0",
   "description": "Api for the Posterizer project",
-  "main": "src/app.js",
   "scripts": {
-    "start": "NODE_PATH=./build node build/app.js",
+    "dev": "nodemon src/app.ts",
     "build": "tsc -p .",
-    "dev": "nodemon src/app.ts"
+    "prod": "NODE_PATH=./build node build/app.js"
   },
   "author": "",
   "license": "ISC",

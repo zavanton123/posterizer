@@ -1,3 +1,4 @@
+version: '3'
 services:
   database:
     image: mongo
@@ -7,45 +8,21 @@ services:
     depends_on:
       - api
       - web
-    restart: always
     build:
       context: ./nginx
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     ports:
-      - "3050:80"
+      - "8080:80"
   web:
-    stdin_open: true
+    image: zavanton/posterizer-web
     build:
       context: ./web
       dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-  #    volumes:
-  #      - /app/node_modules
-  #      - ./web/src:/app
   api:
+    image: zavanton/posterizer-api
     build:
       context: ./api
       dockerfile: Dockerfile
-      target: base
-    image: posterizer-api
-    container_name: posterizer-api
-    env_file:
-      - .env
-    environment:
-      - DBPORT=$DBPORT
-      - DBNAME=$DBNAME
-    ports:
-      - "5000:5000"
-    expose:
-      - "5000"
-    volumes:
-      - ./api/src:/home/node/app/src
-      - ./api/nodemon.json:/home/node/app/nodemon.json
-    command: npm run dev
-volumes:
-  node_modules:
-  dbdata:
 networks:
   default:
     external:

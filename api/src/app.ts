@@ -26,7 +26,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 });
 
 // REST endpoints
-app.use('/api', apiRouter);
+app.use('/', apiRouter);
 
 // Add error processing
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
@@ -43,6 +43,5 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', () => {
   console.log('zavanton - connected to MongoDB');
-  console.log("hello world");
   app.listen(APP_PORT);
 });

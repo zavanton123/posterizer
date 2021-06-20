@@ -3,7 +3,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t zavanton/posterizer-web-test -f ./web/Dockerfile.dev ./web
+  - docker build -t zavanton/posterizer-web-test -f ./web/Dockerfile.dev.dev ./web
 
 script:
   - docker run -e CI=true zavanton/posterizer-web-test npm run test
